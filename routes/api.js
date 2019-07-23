@@ -1,7 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var db = require('../db/async-db')
+const posts = require('../controller/posts')
+const users = require('../controller/users')
+
 
 // 允许跨域访问
 router.use("*", function (req, res, next) {
@@ -11,28 +13,10 @@ router.use("*", function (req, res, next) {
 })
 
 // Define the router, those router is based on '/api'
-router.get('/posts', async function(req, res, next) {
-  try {
+router.get('/post/list', posts.listPosts);
+router.post('/post/create', posts.createPost);
 
-    let result = await db.query('SELECT * FROM posts')
-    res.json(result)
-  } catch (e) {
-    res.status(500).send(e)
-  }
-});
-
-router.post('/new_post', async function(req, res, next) {
-  try {
-
-    const data = req.body
-
-    let result = await db.query('INSERT INTO posts(title, content) VALUES(?,?)', [data.title, data.content])
-    res.json(result)
-
-  } catch (e) {
-    res.status(500).send(e)
-  }
-});
+router.get('/user/create', users.createUser)
 
 
 module.exports = router;

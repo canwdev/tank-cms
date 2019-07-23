@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const config = require('./config')
 
-let equelize = new Sequelize(config.database, config.user, config.password, {
+let seq = new Sequelize(config.database, config.user, config.password, {
   host: config.host,
   dialect: 'mysql',
   pool: {
@@ -11,4 +11,4 @@ let equelize = new Sequelize(config.database, config.user, config.password, {
   }
 })
 
-module.exports = equelize
+module.exports = seq
