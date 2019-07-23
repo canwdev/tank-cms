@@ -1,4 +1,4 @@
-const mysql = require('mysql')
+const mysql = require('mysql2')
 const pool = mysql.createPool(require('./config'))
 
 let query = function (sql, params) {

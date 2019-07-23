@@ -1,5 +1,5 @@
 // MySQL 操作封装
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const dbConfig = require('./config')
 
 const query = function(sql, params, callback) {
