@@ -30,3 +30,6 @@ yarn install
 ## 参考
 
 - [Express 文档 - 应用程序生成器](https://expressjs.com/zh-cn/starter/generator.html)
+- [Node.js 连接 MySQL](http://www.runoob.com/nodejs/nodejs-mysql.html)
+- [async/await封装使用mysql](https://chenshenhai.github.io/koa2-note/note/mysql/async.html)
+
