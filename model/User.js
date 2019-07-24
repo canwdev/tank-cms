@@ -16,12 +16,15 @@ let User = seq.define('user', {
     comment: '用户名'
   },
   password: {
-    type: Sequelize.STRING(50),
+    type: Sequelize.STRING(500),
     allowNull: false,
-    comment: '密码'
+    comment: '密码',
+    set(val) {
+      this.setDataValue('password', require('bcrypt').hashSync(val, 10));
+    }
   },
   role: {
-    type: Sequelize.BIGINT(11),
+    type: Sequelize.STRING(50),
     allowNull: false,
     comment: '角色'
   },
