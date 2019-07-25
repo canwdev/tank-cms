@@ -17,6 +17,7 @@ router.use("*", function (req, res, next) {
 router.get('/post/list', posts.list);
 router.get('/post/detail', posts.detail);
 router.post('/post/update', authLogin, posts.update);
+router.get('/post/delete', authLogin, posts.delete);
 
 router.get('/user/create', users.createUser);
 router.post('/user/login', users.login);

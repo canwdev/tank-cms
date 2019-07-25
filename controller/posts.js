@@ -1,21 +1,47 @@
 // const db = require('../db/async-db')
 const Post = require('../model/Post')
+const striptags = require('striptags')
+
 
 module.exports = {
 
   async list(req, res, next) {
     try {
+
+      let offset, limit
+      if (req.query.limit) {
+        offset = req.query.offset || 0
+        limit = req.query.limit
+
+        offset = parseInt(offset)
+        limit = parseInt(limit)
+      }
+
+      console.log(offset, limit)
+
       // let result = await db.query('SELECT * FROM posts')
-      let result = await Post.findAll({
+      let result = await Post.findAndCountAll({
+        offset,
+        limit,
         order: [
           ['id', 'DESC']
-        ]
+        ],
       })
+
+
+
       return res.json({
         code: 0,
-        data: result
+        data: {
+          count: result.count,
+          rows: result.rows.map(v => {
+            v.content = striptags(v.content.slice(0, 200))
+            return v
+          })
+        }
       })
     } catch (e) {
+      console.error(e)
       return res.status(500).send()
     }
   },
@@ -62,7 +88,7 @@ module.exports = {
             author_ids: user_id
           },
           {
-            where: {id}
+            where: {id: data.id}
           }
         )
 
@@ -86,7 +112,26 @@ module.exports = {
       })
 
     } catch (e) {
-      return res.status(500).send(e)
+      console.error(e)
+      return res.status(500).send()
+    }
+  },
+
+  async delete(req, res, next) {
+    const id = req.query.id
+
+    try {
+      if (!id) {
+        return res.json({code: 400})
+      }
+      let result = await Post.destroy({
+        where: {id}
+      })
+
+      return res.json({code: 0})
+    } catch (e) {
+      console.error(e)
+      return res.status(500).send()
     }
   }
 }

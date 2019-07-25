@@ -23,8 +23,6 @@ module.exports = async function authLogin(res, req, next) {
         where: {id}
       })
 
-      console.log(user)
-
       if (!user) return res.send({
         code: 403,
         message: '登录状态过期，请重新登录！'
