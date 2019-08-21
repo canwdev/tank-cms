@@ -2,6 +2,7 @@ const User = require('../model/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const COMMON = require('../utils/common')
+const OK = COMMON.CODE_OK
 
 module.exports = {
 
@@ -12,11 +13,11 @@ module.exports = {
         username: 'canwdev',
         password: '123456',
         role: 'admin',
-        avatar: 'https://ws3.sinaimg.cn/large/005BYqpgly1g5a471jw6lj307805cglr.jpg?referrer=https://cdn.sinaimg.cn.52ecy.cn'
+        avatar: '/upload/avatar.jpg'
       })
 
       return res.json({
-        code: 0,
+        code: OK,
         message: '创建成功'
       })
 
@@ -66,7 +67,7 @@ module.exports = {
       retUser.token = token
 
       return res.json({
-        code: 0,
+        code: OK,
         message: '登录成功！',
         data: retUser
       })
@@ -82,7 +83,7 @@ module.exports = {
       const id = req.__userid
 
       return res.json({
-        code: 0,
+        code: OK,
         data: id
       })
 
@@ -97,6 +98,8 @@ module.exports = {
    */
   async getUserInfo(req, res, next) {
     const data = req.query
+
+    const hostUrl = 'http://' + req.headers.host
 
     try {
       const token = data.token
@@ -124,9 +127,9 @@ module.exports = {
       // 移除敏感信息
       delete retUser.password
       retUser.token = token
-
+      retUser.avatar = hostUrl + retUser.avatar
       return res.json({
-        code: 0,
+        code: OK,
         data: retUser
       })
     } catch (e) {

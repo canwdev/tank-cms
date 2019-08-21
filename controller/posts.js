@@ -1,7 +1,8 @@
 // const db = require('../db/async-db')
 const Post = require('../model/Post')
 const striptags = require('striptags')
-
+const COMMON = require('../utils/common')
+const OK = COMMON.CODE_OK
 
 module.exports = {
 
@@ -31,7 +32,7 @@ module.exports = {
 
 
       return res.json({
-        code: 0,
+        code: OK,
         data: {
           count: result.count,
           rows: result.rows.map(v => {
@@ -64,7 +65,7 @@ module.exports = {
       })
 
       return res.json({
-        code: 0,
+        code: OK,
         data: post
       })
 
@@ -93,7 +94,7 @@ module.exports = {
         )
 
         return res.json({
-          code: 0,
+          code: OK,
           message: '更新成功'
         })
       }
@@ -104,7 +105,7 @@ module.exports = {
         author_ids: user_id
       })
       return res.json({
-        code: 0,
+        code: OK,
         message: '创建成功',
         data: {
           id: result.id
