@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const JWT_TOKEN = require('../utils/common').JWT_TOKEN
+const COMMON = require('../utils/common')
 const User = require('../model/User')
 
 /**
@@ -23,8 +24,8 @@ module.exports = async function authLogin(res, req, next) {
         where: {id}
       })
 
-      if (!user) return res.send({
-        code: 403,
+      if (!user) return res.status(COMMON.CODE_CLIENT_FORBIDDEN).send({
+        code: COMMON.CODE_CLIENT_FORBIDDEN,
         message: '登录状态过期，请重新登录！'
       })
 
@@ -32,8 +33,8 @@ module.exports = async function authLogin(res, req, next) {
       req.__userid = id
       next()
     } else {
-      return res.send({
-        code: 403,
+      return res.status(COMMON.CODE_CLIENT_FORBIDDEN).send({
+        code: COMMON.CODE_CLIENT_FORBIDDEN,
         message: '请先登录!'
       })
     }

@@ -1,6 +1,6 @@
 // const db = require('../db/async-db')
 const Post = require('../model/Post')
-const striptags = require('striptags')
+const striptags = require('striptags')  // 去除HTML标签
 const COMMON = require('../utils/common')
 const OK = COMMON.CODE_OK
 
@@ -123,7 +123,7 @@ module.exports = {
 
     try {
       if (!id) {
-        return res.json({code: 400})
+        return res.json({code: COMMON.CODE_CLIENT_ERR})
       }
       let result = await Post.destroy({
         where: {id}

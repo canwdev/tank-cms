@@ -33,7 +33,7 @@ module.exports = {
     try {
       if (!data.username || !data.password) {
         return res.json({
-          code: 400,
+          code: COMMON.CODE_CLIENT_ERR,
           message: '缺少用户名或密码'
         })
       }
@@ -50,7 +50,7 @@ module.exports = {
       )
       if (!isPasswordValid) {
         return res.send({
-          code: 400,
+          code: COMMON.CODE_CLIENT_ERR,
           message: '用户名或密码错误'
         })
       }
@@ -99,13 +99,13 @@ module.exports = {
   async getUserInfo(req, res, next) {
     const data = req.query
 
-    const hostUrl = 'http://' + req.headers.host
+    const hostUrl = '//' + req.headers.host
 
     try {
       const token = data.token
       if (!token) {
         return res.json({
-          code: 400,
+          code: COMMON.CODE_CLIENT_ERR,
           message: 'token格式错误'
         })
       }
@@ -118,7 +118,7 @@ module.exports = {
 
       if (!user) {
         return res.json({
-          code: 403,
+          code: COMMON.CODE_CLIENT_FORBIDDEN,
           message: 'token验证失败 (1)'
         })
       }
@@ -143,7 +143,7 @@ module.exports = {
       }
 
       return res.json({
-        code: 403,
+        code: COMMON.CODE_CLIENT_FORBIDDEN,
         message: 'token验证失败 (2)'
       })
     }
