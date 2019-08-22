@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=9002 node ./bin/www",
+    "start": "PORT=3102 node ./bin/www",
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
