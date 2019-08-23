@@ -1,5 +1,6 @@
 // const db = require('../db/async-db')
 const Post = require('../model/Post')
+const User = require('../model/User')
 const striptags = require('striptags')  // 去除HTML标签
 const COMMON = require('../utils/common')
 const OK = COMMON.CODE_OK
@@ -63,6 +64,14 @@ module.exports = {
           id
         }
       })
+
+      // 获取作者信息
+      const author = await User.findOne({
+        where: {
+          id: post.author_ids
+        }
+      })
+      post.author_ids = author.nickname
 
       return res.json({
         code: OK,

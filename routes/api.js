@@ -31,6 +31,8 @@ var upload = multer({
 })// 定义图片上传的临时目录
 router.post('/tools/upload', authLogin, upload.single('fileToUpload'), tools.uploadFile);
 router.get('/tools/listUploaded', authLogin, tools.listUploadedFile);
+router.post('/tools/deleteUploaded', authLogin, tools.deleteUploadedFile);
+router.get('/tools/encryptText', authLogin, tools.encryptText);
 
 
 module.exports = router;

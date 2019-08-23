@@ -1,10 +1,28 @@
 const fs = require('fs')
+const path = require('path')
+const bcrypt = require('bcrypt')
 const COMMON = require('../utils/common')
 const OK = COMMON.CODE_OK
 const utils = require('../utils')
 const walk = utils.walk
 
 module.exports = {
+
+  async encryptText(req, res, next) {
+    try {
+      const text = req.query.text
+      const result = bcrypt.hashSync(text, 10)
+
+      return res.json({
+        code: OK,
+        data: result
+      })
+    } catch (e) {
+      console.error(e)
+      return res.status(500).send()
+    }
+
+  },
 
   async uploadFile(req, res, next) {
     try {
@@ -54,6 +72,29 @@ module.exports = {
         })
       })
 
+    } catch (e) {
+      console.error(e)
+      return res.status(500).send()
+    }
+  },
+
+  async deleteUploadedFile(req, res, next) {
+    try {
+      const fileName = req.body.fileName
+      if (!fileName) throw 'Error: No fileName'
+
+      const fullPath = path.join(COMMON.UPLOAD_PATH + '/' + fileName)
+
+      fs.unlink(fullPath, function (err) {
+        if (err) return res.json({
+          code: COMMON.CODE_CLIENT_ERR,
+          message: '文件不存在'
+        })
+
+        return res.json({
+          code: OK
+        })
+      })
     } catch (e) {
       console.error(e)
       return res.status(500).send()
