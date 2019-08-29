@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const bcrypt = require('bcrypt')
+const Settings = require('../model/Settings')
 const COMMON = require('../utils/common')
 const OK = COMMON.CODE_OK
 const utils = require('../utils')
@@ -95,6 +96,21 @@ module.exports = {
           code: OK
         })
       })
+    } catch (e) {
+      console.error(e)
+      return res.status(500).send()
+    }
+  },
+
+  async getSettings(req, res, next) {
+    try {
+      let result = await Settings.findAll()
+
+      return res.json({
+        code: OK,
+        data: result
+      })
+
     } catch (e) {
       console.error(e)
       return res.status(500).send()

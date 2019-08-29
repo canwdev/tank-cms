@@ -34,5 +34,7 @@ router.get('/tools/listUploaded', authLogin, tools.listUploadedFile);
 router.post('/tools/deleteUploaded', authLogin, tools.deleteUploadedFile);
 router.get('/tools/encryptText', authLogin, tools.encryptText);
 
+router.get('/tools/getSettings', authLogin, tools.getSettings);
+
 
 module.exports = router;
