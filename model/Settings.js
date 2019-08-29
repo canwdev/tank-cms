@@ -15,6 +15,7 @@ let Model = seq.define('setting', {
     allowNull: false
   },
   value: Sequelize.TEXT,
+  type: Sequelize.STRING
 }, {timestamps: true})
 
 Model.sync().then(async function () {
@@ -22,7 +23,8 @@ Model.sync().then(async function () {
   if (count === 0) {
     return Model.create({
       key: 'website_title',
-      value: 'Can\'s Blog!'
+      value: 'Can\'s Blog!',
+      type: ''
     })
   }
 

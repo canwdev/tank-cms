@@ -113,7 +113,33 @@ module.exports = {
 
     } catch (e) {
       console.error(e)
-      return res.status(500).send()
+      return res.status(500).send(e.message)
+    }
+  },
+
+  async setSettings(req, res, next) {
+    const data = req.body
+
+    try {
+      if (!data.key) return res.json({
+        code: COMMON.CODE_CLIENT_ERR,
+        message: '缺少必要参数'
+      })
+
+      let result = await Settings.create({
+        key: data.key,
+        value: data.value,
+        type: data.type
+      })
+
+      return res.json({
+        code: OK,
+        message: '设置保存成功！'
+      })
+
+    } catch (e) {
+      console.error(e)
+      return res.status(500).send(e.message)
     }
   }
 
