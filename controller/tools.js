@@ -141,6 +141,31 @@ module.exports = {
       console.error(e)
       return res.status(500).send(e.message)
     }
+  },
+
+  // 对外开放的前端爬虫数据接收接口
+  async saveHitokoto(req, res, next) {
+    const data = req.body
+
+    try {
+      if (!data.key) return res.json({
+        code: COMMON.CODE_CLIENT_ERR,
+        message: '缺少必要参数'
+      })
+
+      let result = await Settings.create({
+        key: data.key,
+        value: data.value,
+        type: 'hitokoto'
+      })
+
+      return res.json({
+        code: OK
+      })
+
+    } catch (e) {
+      return res.status(500).send()
+    }
   }
 
 }

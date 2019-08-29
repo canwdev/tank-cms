@@ -36,6 +36,7 @@ router.get('/tools/encryptText', authLogin, tools.encryptText);
 
 router.get('/tools/getSettings', authLogin, tools.getSettings);
 router.post('/tools/setSettings', authLogin, tools.setSettings);
+router.post('/tools/saveHitokoto', tools.saveHitokoto);
 
 
 module.exports = router;
