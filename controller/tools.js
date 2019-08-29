@@ -104,7 +104,16 @@ module.exports = {
 
   async getSettings(req, res, next) {
     try {
-      let result = await Settings.findAll()
+      let result = await Settings.findAndCountAll({
+        offset: 0,
+        limit: 10,
+        where: {
+          type: 'hitokoto'
+        },
+        order: [
+          ['id', 'DESC']
+        ],
+      })
 
       return res.json({
         code: OK,
