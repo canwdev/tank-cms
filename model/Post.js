@@ -15,6 +15,10 @@ let Post = seq.define('post', {
     type: Sequelize.STRING(200),
     comment: '文章作者id，若有多个作者，用半角逗号`,`隔开'
   },
+  isMarkdown: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
+  },
   // create_time: Sequelize.DATE,
   // update_time: Sequelize.DATE,
 }, {timestamps: true})

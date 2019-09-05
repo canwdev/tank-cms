@@ -4,6 +4,7 @@ const User = require('../model/User')
 const striptags = require('striptags')  // 去除HTML标签
 const COMMON = require('../utils/common')
 const OK = COMMON.CODE_OK
+const showdown  = require('showdown')
 
 module.exports = {
 
@@ -72,6 +73,11 @@ module.exports = {
         }
       })
       post.author_ids = author.nickname
+
+      // if (post.isMarkdown) {
+      //   const converter = new showdown.Converter()
+      //   post.content = converter.makeHtml(post.content)
+      // }
 
       return res.json({
         code: OK,
