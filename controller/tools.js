@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const bcrypt = require('bcrypt')
 const Settings = require('../model/Settings')
+const Hitokoto = require('../model/Hitokoto')
 const COMMON = require('../utils/common')
 const OK = COMMON.CODE_OK
 const utils = require('../utils')
@@ -175,6 +176,13 @@ module.exports = {
     } catch (e) {
       return res.status(500).send()
     }
-  }
+  },
 
+  async temp(req, res, next) {
+    let result= await Hitokoto.findAll()
+
+    return res.json({
+      result
+    })
+  }
 }
