@@ -7,6 +7,7 @@ const COMMON = require('../utils/common')
 const OK = COMMON.CODE_OK
 const utils = require('../utils')
 const walk = utils.walk
+// const seq = require('../db/sequelize')
 
 module.exports = {
 
@@ -105,16 +106,7 @@ module.exports = {
 
   async getSettings(req, res, next) {
     try {
-      let result = await Settings.findAndCountAll({
-        offset: 0,
-        limit: 10,
-        where: {
-          type: 'hitokoto'
-        },
-        order: [
-          ['id', 'DESC']
-        ],
-      })
+      let result = await Settings.findAndCountAll()
 
       return res.json({
         code: OK,
@@ -158,16 +150,14 @@ module.exports = {
     const data = req.body
 
     try {
-      if (!data.key) return res.json({
-        code: COMMON.CODE_CLIENT_ERR,
-        message: '缺少必要参数'
-      })
+      data.key = data.id
+      delete data.id
+      
+      data.value = data.hitokoto
+      delete data.hitokoto
+      
 
-      let result = await Settings.create({
-        key: data.key,
-        value: data.value,
-        type: 'hitokoto'
-      })
+      let result = await Hitokoto.create(data)
 
       return res.json({
         code: OK
@@ -178,11 +168,35 @@ module.exports = {
     }
   },
 
-  async temp(req, res, next) {
-    let result= await Hitokoto.findAll()
+  async queryHitokoto(req, res, next) {
+    try {
+      let result= await Hitokoto.findAndCountAll({
+        offset: 0,
+        limit: 10,
+        // where: {
+        //   type: 'hitokoto'
+        // },
+        // order: [
+        //   [ seq.cast(seq.col('key'), 'UNSIGNED INTEGER') , 'ASC' ] 
+        // ],
+        order: [
+          ['id', 'DESC']
+        ],
+      })
 
+      return res.json({
+        code: OK,
+        data: result
+      })
+    } catch (e) {
+      return res.status(500).send()
+    }
+  },
+
+  async temp(req, res, next) {
     return res.json({
-      result
+      code: OK,
+      message: 'ok'
     })
   }
 }
