@@ -1,29 +1,34 @@
 {
-  "name": "node-blog",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "PORT=3102 node ./bin/www",
-    "dev": "nodemon ./bin/www"
-  },
-  "dependencies": {
-    "bcrypt": "^3.0.6",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "ejs": "~2.6.1",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "jsonwebtoken": "^8.5.1",
-    "log4js": "^4.5.1",
-    "morgan": "~1.9.1",
-    "multer": "^1.4.2",
-    "mysql2": "^1.6.5",
-    "sequelize": "^5.10.2",
-    "showdown": "^1.9.0",
-    "striptags": "^3.1.1",
-    "stylus": "0.54.5"
-  },
-  "devDependencies": {
-    "nodemon": "^1.19.1"
-  }
+ "name": "tank-cms",
+ "version": "0.1.0",
+ "private": true,
+ "scripts": {
+  "start": "PORT=3102 node ./bin/www",
+  "dev": "nodemon ./bin/www"
+ },
+ "nodemonConfig": {
+  "ignore": [
+   "public/*"
+  ]
+ },
+ "dependencies": {
+  "bcrypt": "^3.0.6",
+  "cookie-parser": "~1.4.4",
+  "debug": "~2.6.9",
+  "ejs": "~2.6.1",
+  "express": "~4.16.1",
+  "http-errors": "~1.6.3",
+  "jsonwebtoken": "^8.5.1",
+  "log4js": "^4.5.1",
+  "morgan": "~1.9.1",
+  "multer": "^1.4.2",
+  "mysql2": "^1.6.5",
+  "sequelize": "^5.10.2",
+  "showdown": "^1.9.0",
+  "striptags": "^3.1.1",
+  "stylus": "0.54.5"
+ },
+ "devDependencies": {
+  "nodemon": "^1.19.1"
+ }
 }

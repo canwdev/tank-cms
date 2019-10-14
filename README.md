@@ -1,31 +1,52 @@
-# node-blog —— Learn Node.js in Action
+# TankCMS · 企业级 CMS 开发框架
 
-简介：本项目致力于实现一个基础的博客，使用Express作为Web框架，数据库使用阿里云RDS(MySQL)。
+> 简介：本项目致力于实现一个企业级网站基础框架。使用 Tank 命名，期望这个框架坚固并且灵活。 
 
-## 初始化项目
+技术栈：
 
-全局安装 Express 应用程序生成器：`npm install express-generator -g`
+- 后端：Node.js / Express / MySQL
+- 前端：Vue / ejs模板引擎 / stylus
 
-初始化项目：这里使用`ejs`作为模板渲染引擎，`stylus`作为CSS预处理语言
+## 启动项目
 
-```
-express --view ejs --css stylus --git
+```sh
 yarn install
+
+# 开发环境
+npm run dev
+
+# 生产环境
+npm run start
+
+# PM2
+pm2 start ecosystem.config.js
 ```
 
-## 启动调试
+## 部署说明
 
-确保全局安装了nodemon：`npm i -g nodemon`
+自动化部署：暂无
 
-使用VSCode，先 Launch，然后 Attach
+## TODOs
 
-或者直接运行`yarn run dev`
-
-## 生产环境
-
-手动部署：将源代码部署至生产环境，运行`yarn run start`启动
-
-自动部署/持续集成：暂无
+- [ ] 整合后台管理界面，自动部署脚本
+- [ ] 简易前端ejs模板搭建
+- [ ] 使用ejs模板的前端路由系统
+- [ ] 考虑到需要前后端分离，完善API“代码即文档”
+- 功能开发
+    - [ ] 基础配置项（站点名称、联系我们信息、SEO信息等）
+    - [ ] 特殊栏目页（首页、关于我们等）
+    - [ ] 栏目分类（无限级）
+    - 资讯功能
+        - [X] 资讯列表
+        - [ ] 详情
+        - [ ] 查询
+        - [ ] 依据栏目分类
+        - [ ] 依据标签分类
+        - [ ] 特殊资讯自定义（如图片列表等）
+    - [ ] 用户反馈
+    - [ ] 第三方 JS 注入配置（商桥、统计等）
+- 研究
+    - [ ] 静态化站点生成
 
 ## 参考
 
