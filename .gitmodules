@@ -1,0 +1,3 @@
+[submodule "tank-cms-admin-ui"]
+	path = tank-cms-admin-ui
+	url = git@gitee.com:canwdev/tank-cms-admin-ui.git
