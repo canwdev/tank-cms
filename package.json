@@ -8,7 +8,8 @@
  },
  "nodemonConfig": {
   "ignore": [
-   "public/*"
+   "public/*",
+   "tank-cms-admin-ui/*"
   ]
  },
  "dependencies": {
