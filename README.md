@@ -26,6 +26,17 @@ pm2 start ecosystem.config.js
 
 自动化部署：暂无
 
+## 子模块说明
+
+目前有 `tank-cms-admin-ui` 作为后台管理界面的 git 子模块。
+
+- 克隆含子模块的仓库：`git clone --recursive git@gitee.com:canwdev/tank-cms.git`
+- 或者使用下面的三部操作：
+    - `git clone --recursive git@gitee.com:canwdev/tank-cms.git`
+    - `git submodule init`
+    - `git submodule update`
+- 更新子模块：`git submodule update --remote tank-cms-admin-ui`
+
 ## TODOs
 
 - [ ] 整合后台管理界面，自动部署脚本
