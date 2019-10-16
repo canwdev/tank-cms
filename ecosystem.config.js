@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'node-blog-server',
+  name: 'tank-cms-server',
   script: 'npm',
   args: 'run start'
 }
