@@ -40,6 +40,7 @@ pm2 start ecosystem.config.js
 ## TODOs
 
 - [ ] 整合后台管理界面，自动部署脚本
+- [ ] 精简admin-ui，用stylus 替换 scss
 - [ ] 简易前端ejs模板搭建
 - [ ] 使用ejs模板的前端路由系统
 - [ ] 考虑到需要前后端分离，完善API“代码即文档”
