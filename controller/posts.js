@@ -101,7 +101,8 @@ module.exports = {
           {
             title: data.title,
             content: data.content,
-            author_ids: user_id
+            author_ids: user_id,
+            isMarkdown: data.isMarkdown
           },
           {
             where: {id: data.id}
