@@ -1,10 +1,10 @@
 // const db = require('../db/async-db')
-const Post = require('../model/Post')
-const User = require('../model/User')
+const Post = require('./PostModel')
+const User = require('../users/UserModel')
 const striptags = require('striptags')  // 去除HTML标签
-const COMMON = require('../utils/common')
+const COMMON = require('../../utils/common')
 const OK = COMMON.CODE_OK
-const showdown  = require('showdown')
+// const showdown  = require('showdown')
 
 module.exports = {
 
@@ -20,7 +20,7 @@ module.exports = {
         limit = parseInt(limit)
       }
 
-      console.log(offset, limit)
+      // console.log(offset, limit)
 
       // let result = await db.query('SELECT * FROM posts')
       let result = await Post.findAndCountAll({

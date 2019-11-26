@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const authLogin = require('../middleware/authLogin')  // 验证登录状态中间件
-const posts = require('../controller/posts')
-const users = require('../controller/users')
-const tools = require('../controller/tools')
+const authLogin = require('../components/users/authLoginMiddleware')  // 验证登录状态中间件
+const posts = require('../components/posts')
+const users = require('../components/users')
+const tools = require('../components/tools')
 const COMMON = require('../utils/common')
 
 

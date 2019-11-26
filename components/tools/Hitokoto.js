@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const seq = require('../db/sequelize')
+const seq = require('../../db/sequelize')
 
 let Model = seq.define('hotokoto', {
   id: {
@@ -24,7 +24,7 @@ let Model = seq.define('hotokoto', {
     set(val) {
       let num = parseInt(val)
       if (isNaN(num)) num = 0
-      
+
       this.setDataValue('created_at', num);
     }
   },

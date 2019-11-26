@@ -1,11 +1,11 @@
 const fs = require('fs')
 const path = require('path')
 const bcrypt = require('bcrypt')
-const Settings = require('../model/Settings')
-const Hitokoto = require('../model/Hitokoto')
-const COMMON = require('../utils/common')
+const Settings = require('./Settings')
+const Hitokoto = require('./Hitokoto')
+const COMMON = require('../../utils/common')
 const OK = COMMON.CODE_OK
-const utils = require('../utils')
+const utils = require('../../utils')
 const walk = utils.walk
 // const seq = require('../db/sequelize')
 
@@ -152,10 +152,10 @@ module.exports = {
     try {
       data.key = data.id
       delete data.id
-      
+
       data.value = data.hitokoto
       delete data.hitokoto
-      
+
 
       let result = await Hitokoto.create(data)
 
@@ -177,7 +177,7 @@ module.exports = {
         //   type: 'hitokoto'
         // },
         // order: [
-        //   [ seq.cast(seq.col('key'), 'UNSIGNED INTEGER') , 'ASC' ] 
+        //   [ seq.cast(seq.col('key'), 'UNSIGNED INTEGER') , 'ASC' ]
         // ],
         order: [
           ['id', 'DESC']

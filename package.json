@@ -3,8 +3,8 @@
  "version": "0.1.0",
  "private": true,
  "scripts": {
-  "start": "PORT=3102 node ./bin/www",
-  "dev": "nodemon ./bin/www"
+  "start": "PORT=3102 node index.js",
+  "dev": "nodemon index.js"
  },
  "nodemonConfig": {
   "ignore": [
@@ -25,7 +25,6 @@
   "multer": "^1.4.2",
   "mysql2": "^1.6.5",
   "sequelize": "^5.10.2",
-  "showdown": "^1.9.0",
   "striptags": "^3.1.1",
   "stylus": "0.54.5"
  },

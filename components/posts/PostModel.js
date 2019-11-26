@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
-const seq = require('../db/sequelize')
+const seq = require('../../db/sequelize')
 
-let Post = seq.define('post', {
+let PostModel = seq.define('post', {
   id: {
     type: Sequelize.BIGINT(11),
     autoIncrement: true,
@@ -23,10 +23,10 @@ let Post = seq.define('post', {
   // update_time: Sequelize.DATE,
 }, {timestamps: true})
 
-Post.sync().then(async function () {
-  const count = await Post.count()
+PostModel.sync().then(async function () {
+  const count = await PostModel.count()
   if (count === 0) {
-    return Post.create({
+    return PostModel.create({
       title: 'Hello World!',
       content: '欢迎使用Express。这是您的第一篇文章。编辑或删除它，然后开始写作吧！',
     })
@@ -35,4 +35,4 @@ Post.sync().then(async function () {
 })
 
 
-module.exports = Post
+module.exports = PostModel

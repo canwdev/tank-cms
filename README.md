@@ -1,11 +1,10 @@
-# TankCMS · 企业级 CMS 开发框架
+# TankCMS · 个人版 CMS 开发框架
 
-> 简介：本项目致力于实现一个企业级网站基础框架。使用 Tank 命名，期望这个框架坚固并且灵活。 
+> 简介：本项目致力于实现一个企业级网站基础框架。使用 Tank 命名，期望这个框架稳定并且机动。 
 
 技术栈：
 
 - 后端：Node.js / Express / MySQL
-- 前端：Vue / ejs模板引擎 / stylus
 
 ## 启动项目
 
@@ -26,23 +25,8 @@ pm2 start ecosystem.config.js
 
 自动化部署：暂无
 
-## 子模块说明
-
-目前有 `tank-cms-admin-ui` 作为后台管理界面的 git 子模块。
-
-- 克隆含子模块的仓库：`git clone --recursive git@gitee.com:canwdev/tank-cms.git`
-- 或者使用下面的三部操作：
-    - `git clone --recursive git@gitee.com:canwdev/tank-cms.git`
-    - `git submodule init`
-    - `git submodule update`
-- 更新子模块：`git submodule update --remote tank-cms-admin-ui`
-
 ## TODOs
 
-- [ ] 整合后台管理界面，自动部署脚本
-- [ ] 精简admin-ui，用stylus 替换 scss
-- [ ] 简易前端ejs模板搭建
-- [ ] 使用ejs模板的前端路由系统
 - [ ] 考虑到需要前后端分离，完善API“代码即文档”
 - 功能开发
     - [ ] 基础配置项（站点名称、联系我们信息、SEO信息等）

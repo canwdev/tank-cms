@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const seq = require('../db/sequelize')
+const seq = require('../../db/sequelize')
 
 let Model = seq.define('setting', {
   id: {

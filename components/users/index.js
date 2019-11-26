@@ -1,7 +1,7 @@
-const User = require('../model/User')
+const User = require('./UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const COMMON = require('../utils/common')
+const COMMON = require('../../utils/common')
 const OK = COMMON.CODE_OK
 
 module.exports = {

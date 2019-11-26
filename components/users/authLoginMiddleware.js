@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
-const JWT_TOKEN = require('../utils/common').JWT_TOKEN
-const COMMON = require('../utils/common')
-const User = require('../model/User')
+const JWT_TOKEN = require('../../utils/common').JWT_TOKEN
+const COMMON = require('../../utils/common')
+const User = require('./UserModel')
 
 /**
  * 验证登录中间件

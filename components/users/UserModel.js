@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
-const seq = require('../db/sequelize')
+const seq = require('../../db/sequelize')
 
-let User = seq.define('user', {
+let UserModel = seq.define('user', {
   id: {
     type: Sequelize.BIGINT(11),
     autoIncrement: true,
@@ -39,14 +39,14 @@ let User = seq.define('user', {
 })
 
 // create will run when table not exists
-User.sync({
+UserModel.sync({
   force: false
 }).then(async function () {
 
-  const count = await User.count()
+  const count = await UserModel.count()
   // if empty create a user
   if (count === 0) {
-    return User.create({
+    return UserModel.create({
       username: 'admin',
       password: 'admin',
       role: 'admin',
@@ -57,4 +57,4 @@ User.sync({
 
 })
 
-module.exports = User
+module.exports = UserModel
