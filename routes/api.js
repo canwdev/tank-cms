@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authLogin = require('../components/users/authLoginMiddleware')  // 验证登录状态中间件
-const posts = require('../components/posts')
-const users = require('../components/users')
-const tools = require('../components/tools')
+const authLogin = require('../components/user/authLoginMiddleware')  // 验证登录状态中间件
+const menus = require('../components/menu')
+const posts = require('../components/post')
+const users = require('../components/user')
+const tools = require('../components/tool')
 const COMMON = require('../utils/common')
 
 
@@ -15,6 +16,11 @@ router.use("*", function (req, res, next) {
 })
 
 // Define the router, those router is based on '/api'
+
+router.get('/menu/list', menus.list)
+router.post('/menu/update', authLogin, menus.update)
+router.get('/menu/delete', authLogin, menus.delete)
+
 router.get('/post/list', posts.list);
 router.get('/post/detail', posts.detail);
 router.post('/post/update', authLogin, posts.update);
@@ -39,6 +45,5 @@ router.post('/tools/setSettings', authLogin, tools.setSettings);
 router.post('/tools/saveHitokoto', tools.saveHitokoto);
 router.get('/tools/queryHitokoto', tools.queryHitokoto);
 router.get('/tools/temp', tools.temp);
-
 
 module.exports = router;

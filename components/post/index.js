@@ -1,9 +1,8 @@
 // const db = require('../db/async-db')
 const Post = require('./PostModel')
-const User = require('../users/UserModel')
+const User = require('../user/UserModel')
 const striptags = require('striptags')  // 去除HTML标签
-const COMMON = require('../../utils/common')
-const OK = COMMON.CODE_OK
+const {CODE_OK, CODE_CLIENT_ERR} = require('../../utils/common')
 // const showdown  = require('showdown')
 
 module.exports = {
@@ -34,7 +33,7 @@ module.exports = {
 
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         data: {
           count: result.count,
           rows: result.rows.map(v => {
@@ -80,7 +79,7 @@ module.exports = {
       // }
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         data: post
       })
 
@@ -110,7 +109,7 @@ module.exports = {
         )
 
         return res.json({
-          code: OK,
+          code: CODE_OK,
           message: '更新成功'
         })
       }
@@ -121,7 +120,7 @@ module.exports = {
         author_ids: user_id
       })
       return res.json({
-        code: OK,
+        code: CODE_OK,
         message: '创建成功',
         data: {
           id: result.id
@@ -130,7 +129,7 @@ module.exports = {
 
     } catch (e) {
       console.error(e)
-      return res.status(500).send()
+      return res.status(500).send(e.message)
     }
   },
 
@@ -139,16 +138,16 @@ module.exports = {
 
     try {
       if (!id) {
-        return res.json({code: COMMON.CODE_CLIENT_ERR})
+        return res.json({code: CODE_CLIENT_ERR})
       }
       let result = await Post.destroy({
         where: {id}
       })
 
-      return res.json({code: 0})
+      return res.json({code: CODE_OK})
     } catch (e) {
       console.error(e)
-      return res.status(500).send()
+      return res.status(500).send(e.message)
     }
   }
 }
