@@ -2,18 +2,32 @@ const {CODE_OK, CODE_CLIENT_ERR} = require("../../utils/common")
 const {buildTree, sortTree} = require('../../utils')
 const Menu = require('./MenuModel')
 const Op = require('sequelize').Op
+const memoryCache = require('memory-cache');
+const MENU_CACHE = 'MENU_CACHE'
 
 module.exports = {
   async list(req, res, next) {
     try {
-      let result = await Menu.findAll()
+      let menu
 
-      // TODO：在这加缓存
-      let tree = sortTree(buildTree(result))
+      // 利用缓存，避免每次都从数据库计算递归树
+      const cachedMenu = memoryCache.get(MENU_CACHE)
+
+      if (!cachedMenu) {
+        const result = await Menu.findAll()
+        const tree = sortTree(buildTree(result))
+
+        await memoryCache.put(MENU_CACHE, tree)
+        // console.log('load from db')
+        menu = tree
+      } else {
+        // console.log('load from cache')
+        menu = cachedMenu
+      }
 
       return res.json({
         code: CODE_OK,
-        data: tree
+        data: menu
       })
     } catch (e) {
       console.error(e)
@@ -36,6 +50,9 @@ module.exports = {
           }
         )
 
+        // 删除缓存
+        memoryCache.del(MENU_CACHE)
+
         return res.json({
           code: CODE_OK,
           message: '更新成功'
@@ -50,6 +67,10 @@ module.exports = {
           url: url,
           priority: priority || 1,
         })
+
+        // 删除缓存
+        memoryCache.del(MENU_CACHE)
+
         return res.json({
           code: CODE_OK,
           message: '创建成功',
@@ -59,11 +80,6 @@ module.exports = {
         })
 
       }
-
-      return res.json({
-        code: CODE_OK,
-        data: {}
-      })
     } catch (e) {
       console.error(e)
       return res.status(500).send(e.message)
