@@ -1,32 +1,22 @@
 const Sequelize = require('sequelize')
 const seq = require('../../db/sequelize')
 
-let Model = seq.define('menu', {
-  id: {
-    type: Sequelize.BIGINT(11),
-    autoIncrement: true,
-    primaryKey: true,
-    unique: true,
-    allowNull: false
-  },
+let Model = seq.define('banner', {
   title: {
     type: Sequelize.STRING,
     allowNull: false
   },
+  img: Sequelize.STRING,
+  desc: Sequelize.STRING,
   url: Sequelize.STRING,
-  pid: {
-    type: Sequelize.BIGINT(11),
-    defaultValue: 0,
+  hidden: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
     allowNull: false
   },
   priority: {
     type: Sequelize.BIGINT(11),
     defaultValue: 1,
-    allowNull: false
-  },
-  hidden: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false,
     allowNull: false
   },
 }, {timestamps: false})
@@ -35,8 +25,8 @@ Model.sync().then(async function () {
   const count = await Model.count()
   if (count === 0) {
     return Model.create({
-      title: '首页',
-      url: '/'
+      title: 'title',
+      url: 'url'
     })
   }
 })

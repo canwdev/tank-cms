@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const authLogin = require('../components/user/authLoginMiddleware')  // 验证登录状态中间件
+const website = require('../components/tool/website')
 const menus = require('../components/menu')
+const banner = require('../components/banner')
 const posts = require('../components/post')
 const users = require('../components/user')
 const tools = require('../components/tool')
@@ -16,6 +18,9 @@ router.use("*", function (req, res, next) {
 })
 
 // Define the router, those router is based on '/api'
+router.get('/', website.index);
+
+router.get('/banner/list', banner.list)
 
 router.get('/menu/list', menus.list)
 router.post('/menu/update', authLogin, menus.update)

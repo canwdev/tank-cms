@@ -15,6 +15,11 @@ let PostModel = seq.define('post', {
     type: Sequelize.STRING(200),
     comment: '文章作者id，若有多个作者，用半角逗号`,`隔开'
   },
+  hidden: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false
+  },
   isMarkdown: {
     type: Sequelize.BOOLEAN,
     defaultValue: true

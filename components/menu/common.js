@@ -1,5 +1,6 @@
 const Menu = require('./MenuModel')
 const {buildTree, sortTree} = require('../../utils')
+const Op = require('sequelize').Op
 const memoryCache = require('memory-cache');
 const MENU_CACHE = 'MENU_CACHE'
 
@@ -14,7 +15,13 @@ module.exports = {
     const cachedMenu = memoryCache.get(MENU_CACHE)
 
     if (!cachedMenu) {
-      const result = await Menu.findAll()
+      const result = await Menu.findAll({
+        where: {
+          hidden: {
+            [Op.ne]: 1
+          }
+        }
+      })
       const tree = sortTree(buildTree(result))
 
       await memoryCache.put(MENU_CACHE, tree)

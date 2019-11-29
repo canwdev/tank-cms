@@ -1,4 +1,5 @@
 // const db = require('../db/async-db')
+const Op = require('sequelize').Op
 const Post = require('./PostModel')
 const User = require('../user/UserModel')
 const striptags = require('striptags')  // 去除HTML标签
@@ -23,6 +24,11 @@ module.exports = {
 
       // let result = await db.query('SELECT * FROM posts')
       let result = await Post.findAndCountAll({
+        where: {
+          hidden: {
+            [Op.ne]: 1
+          }
+        },
         offset,
         limit,
         order: [
