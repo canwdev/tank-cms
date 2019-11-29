@@ -1,10 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const website = require('../components/tool/website')
 
 /* GET home page. */
-router.get('/', function(req, res) {
-  res.render('index', { title: 'TankCMS' });
-});
+router.get('/', website.index);
 
 // new
 router.get('/post/new', function(req, res) {

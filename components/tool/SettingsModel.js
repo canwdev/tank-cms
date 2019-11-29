@@ -16,18 +16,24 @@ let Model = seq.define('setting', {
   },
   value: Sequelize.TEXT,
   type: Sequelize.STRING
-}, {timestamps: true})
+}, {timestamps: false})
 
 Model.sync().then(async function () {
   const count = await Model.count()
   if (count === 0) {
-    return Model.create({
-      key: 'website_title',
-      value: 'Can\'s Blog!',
-      type: ''
-    })
+    return Model.bulkCreate([
+      {
+        key: 'websiteTitle',
+        value: '解构科技',
+        type: 'website'
+      },
+      {
+        key: 'companyName',
+        value: '解构科技有限公司',
+        type: 'website'
+      }
+    ])
   }
-
 })
 
 

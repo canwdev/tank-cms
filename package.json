@@ -1,6 +1,7 @@
 {
  "name": "tank-cms",
- "version": "0.1.0",
+ "version": "0.2.0",
+ "author": "canwdev",
  "private": true,
  "scripts": {
   "start": "PORT=3102 node index.js",

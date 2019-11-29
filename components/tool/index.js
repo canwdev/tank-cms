@@ -3,21 +3,20 @@ const path = require('path')
 const bcrypt = require('bcrypt')
 const Settings = require('./SettingsModel')
 const Hitokoto = require('./HitokotoModel')
-const COMMON = require('../../utils/common')
-const OK = COMMON.CODE_OK
+const {CODE_OK, UPLOAD_PATH, PUBLIC_PATH,CODE_CLIENT_ERR} = require('../../utils/common')
 const utils = require('../../utils')
 const walk = utils.walk
 // const seq = require('../db/sequelize')
 
 module.exports = {
 
-  async encryptText(req, res, next) {
+  async encryptText(req, res) {
     try {
       const text = req.query.text
       const result = bcrypt.hashSync(text, 10)
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         data: result
       })
     } catch (e) {
@@ -27,7 +26,7 @@ module.exports = {
 
   },
 
-  async uploadFile(req, res, next) {
+  async uploadFile(req, res) {
     try {
       let file = req.file
       if (!file) {
@@ -42,7 +41,7 @@ module.exports = {
         if (err) throw "Save file error!"
 
         return res.json({
-          code: OK,
+          code: CODE_OK,
           data: {
             path,
             host: req.headers.host
@@ -55,11 +54,10 @@ module.exports = {
     }
   },
 
-  async listUploadedFile(req, res, next) {
+  async listUploadedFile(req, res) {
     try {
-      walk(COMMON.UPLOAD_PATH, function (err, results) {
-        const publicPath = COMMON.PUBLIC_PATH
-        const length = publicPath.length
+      walk(UPLOAD_PATH, function (err, results) {
+        const length = PUBLIC_PATH.length
 
         const files = []
         // 去除文件系前面的路径，只保留web可访问的public路径
@@ -68,7 +66,7 @@ module.exports = {
         })
 
         return res.json({
-          code: OK,
+          code: CODE_OK,
           data: {
             files
           }
@@ -81,21 +79,21 @@ module.exports = {
     }
   },
 
-  async deleteUploadedFile(req, res, next) {
+  async deleteUploadedFile(req, res) {
     try {
       const fileName = req.body.fileName
       if (!fileName) throw 'Error: No fileName'
 
-      const fullPath = path.join(COMMON.UPLOAD_PATH + '/' + fileName)
+      const fullPath = path.join(UPLOAD_PATH + '/' + fileName)
 
       fs.unlink(fullPath, function (err) {
         if (err) return res.json({
-          code: COMMON.CODE_CLIENT_ERR,
+          code: CODE_CLIENT_ERR,
           message: '文件不存在'
         })
 
         return res.json({
-          code: OK
+          code: CODE_OK
         })
       })
     } catch (e) {
@@ -104,12 +102,12 @@ module.exports = {
     }
   },
 
-  async getSettings(req, res, next) {
+  async getSettings(req, res) {
     try {
       let result = await Settings.findAndCountAll()
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         data: result
       })
 
@@ -119,23 +117,23 @@ module.exports = {
     }
   },
 
-  async setSettings(req, res, next) {
+  async setSettings(req, res) {
     const data = req.body
 
     try {
       if (!data.key) return res.json({
-        code: COMMON.CODE_CLIENT_ERR,
+        code: CODE_CLIENT_ERR,
         message: '缺少必要参数'
       })
 
-      let result = await Settings.create({
+      await Settings.create({
         key: data.key,
         value: data.value,
         type: data.type
       })
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         message: '设置保存成功！'
       })
 
@@ -146,7 +144,7 @@ module.exports = {
   },
 
   // 对外开放的前端爬虫数据接收接口
-  async saveHitokoto(req, res, next) {
+  async saveHitokoto(req, res) {
     const data = req.body
 
     try {
@@ -157,10 +155,10 @@ module.exports = {
       delete data.hitokoto
 
 
-      let result = await Hitokoto.create(data)
+      await Hitokoto.create(data)
 
       return res.json({
-        code: OK
+        code: CODE_OK
       })
 
     } catch (e) {
@@ -168,7 +166,7 @@ module.exports = {
     }
   },
 
-  async queryHitokoto(req, res, next) {
+  async queryHitokoto(req, res) {
     try {
       let result= await Hitokoto.findAndCountAll({
         offset: 0,
@@ -185,7 +183,7 @@ module.exports = {
       })
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         data: result
       })
     } catch (e) {
@@ -193,9 +191,9 @@ module.exports = {
     }
   },
 
-  async temp(req, res, next) {
+  async temp(req, res) {
     return res.json({
-      code: OK,
+      code: CODE_OK,
       message: 'ok'
     })
   }
