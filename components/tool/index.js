@@ -104,7 +104,7 @@ module.exports = {
 
   async getSettings(req, res) {
     try {
-      let result = await Settings.findAndCountAll()
+      let result = await Settings.findAll()
 
       return res.json({
         code: CODE_OK,
@@ -121,22 +121,41 @@ module.exports = {
     const data = req.body
 
     try {
-      if (!data.key) return res.json({
+      if (!data.id && !data.key) return res.json({
         code: CODE_CLIENT_ERR,
         message: '缺少必要参数'
       })
 
-      await Settings.create({
-        key: data.key,
-        value: data.value,
-        type: data.type
-      })
+      if (data.id) {
+        // 按 id 修改
+        await Settings.update(
+          {
+            key: data.key,
+            value: data.value,
+            type: data.type
+          },
+          {
+            where: {id: data.id}
+          }
+        )
 
-      return res.json({
-        code: CODE_OK,
-        message: '设置保存成功！'
-      })
+        return res.json({
+          code: CODE_OK,
+          message: '更新成功'
+        })
+      } else {
+        // 创建新的
+        await Settings.create({
+          key: data.key,
+          value: data.value,
+          type: data.type
+        })
 
+        return res.json({
+          code: CODE_OK,
+          message: '设置保存成功！'
+        })
+      }
     } catch (e) {
       console.error(e)
       return res.status(500).send(e.message)

@@ -25,8 +25,10 @@ Model.sync().then(async function () {
   const count = await Model.count()
   if (count === 0) {
     return Model.create({
-      title: 'title',
-      url: 'url'
+      title: 'Banner 标题',
+      desc: 'Description',
+      img: 'https://api.neweb.top/bing.php',
+      url: 'https://cn.bing.com/'
     })
   }
 })

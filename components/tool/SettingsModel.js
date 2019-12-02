@@ -31,6 +31,16 @@ Model.sync().then(async function () {
         key: 'companyName',
         value: '解构科技有限公司',
         type: 'website'
+      },
+      {
+        key: 'description',
+        value: 'Website Powered by TankCMS',
+        type: 'website'
+      },
+      {
+        key: 'keywords',
+        value: 'demo, website, nodejs',
+        type: 'website'
       }
     ])
   }
