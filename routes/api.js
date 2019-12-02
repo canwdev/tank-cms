@@ -21,6 +21,8 @@ router.use("*", function (req, res, next) {
 router.get('/', website.index);
 
 router.get('/banner/list', banner.list)
+router.post('/banner/update', authLogin, banner.update)
+router.get('/banner/delete', authLogin, banner.delete)
 
 router.get('/menu/list', menus.list)
 router.post('/menu/update', authLogin, menus.update)
