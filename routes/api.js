@@ -7,6 +7,7 @@ const banner = require('../components/banner')
 const posts = require('../components/post')
 const users = require('../components/user')
 const tools = require('../components/tool')
+const oss = require('../components/tool/oss')
 const COMMON = require('../utils/common')
 
 
@@ -43,6 +44,7 @@ var upload = multer({
   dest: COMMON.UPLOAD_PATH + '/'
 })// 定义图片上传的临时目录
 router.post('/tools/upload', authLogin, upload.single('fileToUpload'), tools.uploadFile);
+router.get('/tools/oss-policy', oss.getOssPolicy)
 router.get('/tools/listUploaded', authLogin, tools.listUploadedFile);
 router.post('/tools/deleteUploaded', authLogin, tools.deleteUploadedFile);
 router.get('/tools/encryptText', authLogin, tools.encryptText);
