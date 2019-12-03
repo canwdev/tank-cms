@@ -2,6 +2,7 @@ const {CODE_OK, CODE_CLIENT_ERR} = require("../../utils/common")
 const Menu = require('./MenuModel')
 const Op = require('sequelize').Op
 const {getMenuTree, delMenuTreeCache} = require('./common')
+const {handleServerError} = require('../../utils')
 
 module.exports = {
   async list(req, res) {
@@ -12,9 +13,8 @@ module.exports = {
         code: CODE_OK,
         data: menu
       })
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res})
     }
   },
   async update(req, res) {
@@ -61,9 +61,8 @@ module.exports = {
         })
 
       }
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
   async delete(req, res) {
@@ -81,9 +80,8 @@ module.exports = {
       })
 
       return res.json({code: CODE_OK})
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+    } catch (error) {
+      handleServerError({res, error})
     }
   }
 }

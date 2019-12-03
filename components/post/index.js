@@ -4,6 +4,7 @@ const Post = require('./PostModel')
 const User = require('../user/UserModel')
 const striptags = require('striptags')  // 去除HTML标签
 const {CODE_OK, CODE_CLIENT_ERR} = require('../../utils/common')
+const {handleServerError} = require('../../utils')
 // const showdown  = require('showdown')
 
 module.exports = {
@@ -48,13 +49,12 @@ module.exports = {
           })
         }
       })
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res})
     }
   },
 
-  async detail(req, res, next) {
+  async detail(req, res) {
     try {
       const id = req.query.id
 
@@ -89,12 +89,12 @@ module.exports = {
         data: post
       })
 
-    } catch (e) {
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res})
     }
   },
 
-  async update(req, res, next) {
+  async update(req, res) {
     try {
       // 获取中间件传来的值
       const user_id = req.__userid
@@ -133,27 +133,25 @@ module.exports = {
         }
       })
 
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 
-  async delete(req, res, next) {
+  async delete(req, res) {
     const id = req.query.id
 
     try {
       if (!id) {
         return res.json({code: CODE_CLIENT_ERR})
       }
-      let result = await Post.destroy({
+      await Post.destroy({
         where: {id}
       })
 
       return res.json({code: CODE_OK})
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+    } catch (error) {
+      handleServerError({res, error})
     }
   }
 }

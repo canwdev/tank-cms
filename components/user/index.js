@@ -1,15 +1,22 @@
 const User = require('./UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const COMMON = require('../../utils/common')
-const OK = COMMON.CODE_OK
+const {
+  CODE_OK,
+  CODE_CLIENT_ERR,
+  JWT_TOKEN,
+  JWT_TOKEN_EXPIRE,
+  CODE_CLIENT_FORBIDDEN,
+  CODE_TOKEN_EXPIRE
+} = require('../../utils/common')
+const {handleServerError} = require('../../utils')
 
 module.exports = {
 
-  async createUser(req, res, next) {
+  async createUser(req, res) {
     try {
 
-      let result = await User.create({
+      await User.create({
         username: 'canwdev',
         password: '123456',
         role: 'admin',
@@ -17,23 +24,23 @@ module.exports = {
       })
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         message: '创建成功'
       })
 
-    } catch (e) {
-      return res.status(500).send('创建失败！')
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 
-  async login(req, res, next) {
+  async login(req, res) {
 
     const data = req.body
 
     try {
       if (!data.username || !data.password) {
         return res.json({
-          code: COMMON.CODE_CLIENT_ERR,
+          code: CODE_CLIENT_ERR,
           message: '缺少用户名或密码'
         })
       }
@@ -50,15 +57,15 @@ module.exports = {
       )
       if (!isPasswordValid) {
         return res.send({
-          code: COMMON.CODE_CLIENT_ERR,
+          code: CODE_CLIENT_ERR,
           message: '用户名或密码错误'
         })
       }
 
       // 生成 token
       // jwt.sign() 接受两个参数，一个是传入的对象，一个是自定义的密钥
-      const token = jwt.sign({ id: String(user.id) }, COMMON.JWT_TOKEN, {
-        expiresIn: COMMON.JWT_TOKEN_EXPIRE
+      const token = jwt.sign({ id: String(user.id) }, JWT_TOKEN, {
+        expiresIn: JWT_TOKEN_EXPIRE
       })
 
       const retUser = Object.assign({}, user.dataValues)
@@ -67,36 +74,34 @@ module.exports = {
       retUser.token = token
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         message: '登录成功！',
         data: retUser
       })
 
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res})
     }
   },
 
-  async logout(req, res, next) {
+  async logout(req, res) {
     try {
       const id = req.__userid
 
       return res.json({
-        code: OK,
+        code: CODE_OK,
         data: id
       })
 
-    } catch (e) {
-      console.log(e)
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res})
     }
   },
 
   /**
    * 检查用户是否登录，若登录则并返回用户信息
    */
-  async getUserInfo(req, res, next) {
+  async getUserInfo(req, res) {
     const data = req.query
 
     const hostUrl = '//' + req.headers.host
@@ -105,20 +110,20 @@ module.exports = {
       const token = data.token
       if (!token) {
         return res.json({
-          code: COMMON.CODE_CLIENT_ERR,
+          code: CODE_CLIENT_ERR,
           message: 'token格式错误'
         })
       }
 
       const raw = String(token)
-      const { id } = jwt.verify(raw, COMMON.JWT_TOKEN)
+      const { id } = jwt.verify(raw, JWT_TOKEN)
       const user = await User.findOne({
         where: {id}
       })
 
       if (!user) {
         return res.json({
-          code: COMMON.CODE_CLIENT_FORBIDDEN,
+          code: CODE_CLIENT_FORBIDDEN,
           message: 'token验证失败 (1)'
         })
       }
@@ -129,21 +134,21 @@ module.exports = {
       retUser.token = token
       retUser.avatar = hostUrl + retUser.avatar
       return res.json({
-        code: OK,
+        code: CODE_OK,
         data: retUser
       })
-    } catch (e) {
-      console.error(e.message)
+    } catch (error) {
+      console.error(error.message)
 
-      if (e.message === 'jwt expired') {
+      if (error.message === 'jwt expired') {
         return res.json({
-          code: COMMON.CODE_TOKEN_EXPIRE,
+          code: CODE_TOKEN_EXPIRE,
           message: '登录状态过期，请重新登录'
         })
       }
 
       return res.json({
-        code: COMMON.CODE_CLIENT_FORBIDDEN,
+        code: CODE_CLIENT_FORBIDDEN,
         message: 'token验证失败 (2)'
       })
     }

@@ -6,6 +6,7 @@ const Hitokoto = require('./HitokotoModel')
 const {CODE_OK, UPLOAD_PATH, PUBLIC_PATH,CODE_CLIENT_ERR} = require('../../utils/common')
 const utils = require('../../utils')
 const walk = utils.walk
+const {handleServerError} = require('../../utils')
 // const seq = require('../db/sequelize')
 
 module.exports = {
@@ -19,9 +20,8 @@ module.exports = {
         code: CODE_OK,
         data: result
       })
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res, error})
     }
 
   },
@@ -48,9 +48,8 @@ module.exports = {
           }
         })
       })
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 
@@ -73,9 +72,8 @@ module.exports = {
         })
       })
 
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 
@@ -96,9 +94,8 @@ module.exports = {
           code: CODE_OK
         })
       })
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 
@@ -111,9 +108,8 @@ module.exports = {
         data: result
       })
 
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 
@@ -156,9 +152,8 @@ module.exports = {
           message: '设置保存成功！'
         })
       }
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 
@@ -180,8 +175,8 @@ module.exports = {
         code: CODE_OK
       })
 
-    } catch (e) {
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 
@@ -205,8 +200,8 @@ module.exports = {
         code: CODE_OK,
         data: result
       })
-    } catch (e) {
-      return res.status(500).send()
+    } catch (error) {
+      handleServerError({res, error})
     }
   },
 

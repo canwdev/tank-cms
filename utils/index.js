@@ -104,9 +104,18 @@ function sortTree(node) {
   return result
 }
 
+/**
+ * 统一处理错误
+ */
+function handleServerError({res, error = {}, code= 500}) {
+  console.error(error)
+  return res.status(code).send(error.message)
+}
+
 module.exports = {
   formatFileNameWithDateTime,
   walk: walkDir,
   buildTree,
-  sortTree
+  sortTree,
+  handleServerError
 }

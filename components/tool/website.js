@@ -2,6 +2,7 @@ const Settings = require('./SettingsModel')
 const {getMenuTree} = require('../menu/common')
 const {CODE_OK} = require("../../utils/common")
 const pkg = require('../../package')
+const {handleServerError} = require('../../utils')
 
 module.exports = {
   async index(req, res) {
@@ -31,9 +32,8 @@ module.exports = {
         }
       })
 
-    } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+    } catch (error) {
+      handleServerError({res, error})
     }
   }
 }
