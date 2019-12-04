@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const {CODE_CLIENT_ERR } = require('./common')
 
 function pad2Zero(val) {
   return val.toString().padStart(2, '0')
@@ -105,11 +106,14 @@ function sortTree(node) {
 }
 
 /**
- * 统一处理错误
+ * 统一处理客户端错误
  */
-function handleServerError({res, error = {}, code= 500}) {
-  console.error(error)
-  return res.status(code).send(error.message)
+function handleCustomError({res, message, code = CODE_CLIENT_ERR}) {
+  // console.error(error)
+  return res.json({
+    code,
+    message: message || 'Error: '+code
+  })
 }
 
 module.exports = {
@@ -117,5 +121,5 @@ module.exports = {
   walk: walkDir,
   buildTree,
   sortTree,
-  handleServerError
+  handleCustomError
 }

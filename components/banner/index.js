@@ -1,9 +1,10 @@
 const {CODE_OK, CODE_CLIENT_ERR} = require("../../utils/common")
+const {handleCustomError} = require("../../utils")
 const Banner = require('./BannerModel')
 const Op = require('sequelize').Op
 
 module.exports = {
-  async list(req, res) {
+  async list(req, res, next) {
 
     try {
       const {showAll} = req.query
@@ -21,12 +22,11 @@ module.exports = {
         data: result.sort((a, b) => a.priority - b.priority)
       })
     } catch (e) {
-      console.error(e)
-      return res.status(500).send()
+      next(e)
     }
   },
 
-  async update(req, res) {
+  async update(req, res, next) {
     const data = req.body
 
     try {
@@ -68,16 +68,15 @@ module.exports = {
         })
       }
     } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+      next(e)
     }
   },
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     const {id} = req.query
 
     try {
-      if (!id) return res.json({code: CODE_CLIENT_ERR})
+      if (!id) return handleCustomError({res})
 
       await Banner.destroy({
         where: {id}
@@ -85,8 +84,7 @@ module.exports = {
 
       return res.json({code: CODE_OK})
     } catch (e) {
-      console.error(e)
-      return res.status(500).send(e.message)
+      next(e)
     }
   }
 }

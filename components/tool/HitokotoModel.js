@@ -18,7 +18,7 @@ let Model = seq.define('hotokoto', {
   type: Sequelize.STRING,
   from: Sequelize.STRING,
   creator: Sequelize.STRING,
-  created_at:  {
+  created_at: {
     type: Sequelize.BIGINT(11),
     defaultValue: 0,
     set(val) {

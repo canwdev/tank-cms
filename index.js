@@ -1,30 +1,21 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
-var app = require('./app');
-var debug = require('debug')('node-blog:server');
-var http = require('http');
+const app = require('./app'),
+  debug = require('debug')('TankCMS'),
+  http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3001');
+const port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
@@ -32,7 +23,6 @@ server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
-
 function normalizePort(val) {
   var port = parseInt(val, 10);
 
@@ -84,5 +74,5 @@ function onError(error) {
 function onListening() {
   var addr = server.address();
 
-  console.log('Server running at http://127.0.0.1:' + port, addr)
+  console.log('Server running at ' + addr.address + port)
 }

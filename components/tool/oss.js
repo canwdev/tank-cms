@@ -1,11 +1,11 @@
-const {handleServerError} = require('../../utils')
+const {handleCustomError} = require('../../utils')
 const {CODE_OK} = require('../../utils/common')
 const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
 
 module.exports = {
-  async getOssPolicy(req, res) {
+  async getOssPolicy(req, res, next) {
     try {
 
       const dirPath = 'testOSS/' // 上传后例子：http://cqq.oss-cn-shenzhen.aliyuncs.com/testOSS/1489388301901，若为空，上传的文件则放到object的根目录
@@ -42,7 +42,7 @@ module.exports = {
       })
 
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   }
 }

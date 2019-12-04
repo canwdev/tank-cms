@@ -4,7 +4,7 @@
  "author": "canwdev",
  "private": true,
  "scripts": {
-  "start": "PORT=3102 node index.js",
+  "start": "NODE_ENV=production PORT=3102 node index.js",
   "dev": "nodemon index.js"
  },
  "nodemonConfig": {
@@ -16,7 +16,7 @@
  "dependencies": {
   "bcrypt": "^3.0.6",
   "cookie-parser": "~1.4.4",
-  "debug": "~2.6.9",
+  "debug": "^4.1.1",
   "ejs": "~2.6.1",
   "express": "~4.16.1",
   "http-errors": "~1.6.3",

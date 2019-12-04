@@ -18,7 +18,7 @@ module.exports = async function authLogin(res, req, next) {
     let token = req.headers.authorization
     if (token) {
       const raw = String(token)
-      const { id } = jwt.verify(raw, JWT_TOKEN)
+      const {id} = jwt.verify(raw, JWT_TOKEN)
 
       const user = await User.findOne({
         where: {id}

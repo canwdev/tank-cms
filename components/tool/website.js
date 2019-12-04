@@ -2,10 +2,10 @@ const Settings = require('./SettingsModel')
 const {getMenuTree} = require('../menu/common')
 const {CODE_OK} = require("../../utils/common")
 const pkg = require('../../package')
-const {handleServerError} = require('../../utils')
+const {handleCustomError} = require('../../utils')
 
 module.exports = {
-  async index(req, res) {
+  async index(req, res, next) {
     try {
       let result = await Settings.findAll({
         where: {type: 'website'}
@@ -33,7 +33,7 @@ module.exports = {
       })
 
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   }
 }

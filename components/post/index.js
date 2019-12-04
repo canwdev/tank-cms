@@ -4,7 +4,7 @@ const Post = require('./PostModel')
 const User = require('../user/UserModel')
 const striptags = require('striptags')  // 去除HTML标签
 const {CODE_OK, CODE_CLIENT_ERR} = require('../../utils/common')
-const {handleServerError} = require('../../utils')
+const {handleCustomError} = require('../../utils')
 // const showdown  = require('showdown')
 
 module.exports = {
@@ -38,7 +38,6 @@ module.exports = {
       })
 
 
-
       return res.json({
         code: CODE_OK,
         data: {
@@ -50,11 +49,11 @@ module.exports = {
         }
       })
     } catch (error) {
-      handleServerError({res})
+      next(error)
     }
   },
 
-  async detail(req, res) {
+  async detail(req, res, next) {
     try {
       const id = req.query.id
 
@@ -90,11 +89,11 @@ module.exports = {
       })
 
     } catch (error) {
-      handleServerError({res})
+      next(error)
     }
   },
 
-  async update(req, res) {
+  async update(req, res, next) {
     try {
       // 获取中间件传来的值
       const user_id = req.__userid
@@ -134,16 +133,16 @@ module.exports = {
       })
 
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   },
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     const id = req.query.id
 
     try {
       if (!id) {
-        return res.json({code: CODE_CLIENT_ERR})
+        return handleCustomError({res, message: 'id 不能为空'})
       }
       await Post.destroy({
         where: {id}
@@ -151,7 +150,7 @@ module.exports = {
 
       return res.json({code: CODE_OK})
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   }
 }

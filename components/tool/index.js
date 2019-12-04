@@ -3,34 +3,31 @@ const path = require('path')
 const bcrypt = require('bcrypt')
 const Settings = require('./SettingsModel')
 const Hitokoto = require('./HitokotoModel')
-const {CODE_OK, UPLOAD_PATH, PUBLIC_PATH,CODE_CLIENT_ERR} = require('../../utils/common')
-const utils = require('../../utils')
-const walk = utils.walk
-const {handleServerError} = require('../../utils')
+const {CODE_OK, UPLOAD_PATH, PUBLIC_PATH} = require('../../utils/common')
+const {handleCustomError, walk} = require('../../utils')
 // const seq = require('../db/sequelize')
 
 module.exports = {
 
-  async encryptText(req, res) {
+  async encryptText(req, res, next) {
     try {
       const text = req.query.text
       const result = bcrypt.hashSync(text, 10)
-
       return res.json({
         code: CODE_OK,
         data: result
       })
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
 
   },
 
-  async uploadFile(req, res) {
+  async uploadFile(req, res, next) {
     try {
       let file = req.file
       if (!file) {
-        throw "No file!"
+        return handleCustomError({res, message: "No file!"})
       }
 
       // file relative path
@@ -38,7 +35,7 @@ module.exports = {
 
       // save to file
       fs.rename(file.path, path, function (err) {
-        if (err) throw "Save file error!"
+        if (err) return handleCustomError({res, message: "Save file error!"})
 
         return res.json({
           code: CODE_OK,
@@ -49,11 +46,11 @@ module.exports = {
         })
       })
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   },
 
-  async listUploadedFile(req, res) {
+  async listUploadedFile(req, res, next) {
     try {
       walk(UPLOAD_PATH, function (err, results) {
         const length = PUBLIC_PATH.length
@@ -73,33 +70,30 @@ module.exports = {
       })
 
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   },
 
-  async deleteUploadedFile(req, res) {
+  async deleteUploadedFile(req, res, next) {
     try {
       const fileName = req.body.fileName
-      if (!fileName) throw 'Error: No fileName'
+      if (!fileName) return handleCustomError({res, message: "No file name"})
 
       const fullPath = path.join(UPLOAD_PATH + '/' + fileName)
 
       fs.unlink(fullPath, function (err) {
-        if (err) return res.json({
-          code: CODE_CLIENT_ERR,
-          message: '文件不存在'
-        })
+        if (err) return handleCustomError({res, message: "文件不存在"})
 
         return res.json({
           code: CODE_OK
         })
       })
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   },
 
-  async getSettings(req, res) {
+  async getSettings(req, res, next) {
     try {
       let result = await Settings.findAll()
 
@@ -109,18 +103,15 @@ module.exports = {
       })
 
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   },
 
-  async setSettings(req, res) {
+  async setSettings(req, res, next) {
     const data = req.body
 
     try {
-      if (!data.id && !data.key) return res.json({
-        code: CODE_CLIENT_ERR,
-        message: '缺少必要参数'
-      })
+      if (!data.id && !data.key) return handleCustomError({res, message: '缺少必要参数'})
 
       if (data.id) {
         // 按 id 修改
@@ -153,12 +144,12 @@ module.exports = {
         })
       }
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   },
 
   // 对外开放的前端爬虫数据接收接口
-  async saveHitokoto(req, res) {
+  async saveHitokoto(req, res, next) {
     const data = req.body
 
     try {
@@ -176,13 +167,13 @@ module.exports = {
       })
 
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   },
 
-  async queryHitokoto(req, res) {
+  async queryHitokoto(req, res, next) {
     try {
-      let result= await Hitokoto.findAndCountAll({
+      let result = await Hitokoto.findAndCountAll({
         offset: 0,
         limit: 10,
         // where: {
@@ -201,11 +192,11 @@ module.exports = {
         data: result
       })
     } catch (error) {
-      handleServerError({res, error})
+      next(error)
     }
   },
 
-  async temp(req, res) {
+  async temp(req, res, next) {
     return res.json({
       code: CODE_OK,
       message: 'ok'
