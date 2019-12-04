@@ -5,6 +5,6 @@ module.exports = {
   host: '127.0.0.1',
   user: 'root',
   password: 'root',
-  database:'my-data-base',
+  database:'tankcms_db',
   port: 3306
 }

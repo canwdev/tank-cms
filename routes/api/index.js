@@ -5,6 +5,7 @@ const menus = require('../../components/menu')
 const banner = require('../../components/banner')
 const posts = require('../../components/post')
 const users = require('../../components/user')
+const recruit = require('../../components/recruit')
 
 
 router.use('/tools', require('./tools'));
@@ -28,6 +29,9 @@ router.get('/user/create', users.createUser);
 router.post('/user/login', users.login);
 router.post('/user/logout', authLogin, users.logout);
 router.get('/user/info', users.getUserInfo);
+
+router.get('/recruit/list', recruit.list)
+
 
 router.use((err, req, res, next) => {
   // if (err.name === 'ValidationError') {

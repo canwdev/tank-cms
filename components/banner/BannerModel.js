@@ -15,7 +15,7 @@ let Model = seq.define('banner', {
     allowNull: false
   },
   priority: {
-    type: Sequelize.BIGINT(11),
+    type: Sequelize.BIGINT(),
     defaultValue: 1,
     allowNull: false
   },

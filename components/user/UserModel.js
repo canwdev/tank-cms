@@ -3,7 +3,7 @@ const seq = require('../../db/sequelize')
 
 let UserModel = seq.define('user', {
   id: {
-    type: Sequelize.BIGINT(11),
+    type: Sequelize.BIGINT(),
     autoIncrement: true,
     primaryKey: true,
     unique: true,

@@ -104,9 +104,18 @@ function sortTree(node) {
   return result
 }
 
+// Group by array of objects https://stackoverflow.com/a/34890276
+function arrayGroupBy(arr, key) {
+  return arr.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {})
+}
+
 module.exports = {
   formatFileNameWithDateTime,
   walk: walkDir,
   buildTree,
-  sortTree
+  sortTree,
+  arrayGroupBy
 }

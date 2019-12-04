@@ -3,14 +3,14 @@ const seq = require('../../db/sequelize')
 
 let Model = seq.define('hotokoto', {
   id: {
-    type: Sequelize.BIGINT(11),
+    type: Sequelize.BIGINT(),
     autoIncrement: true,
     primaryKey: true,
     unique: true,
     allowNull: false
   },
   key: {
-    type: Sequelize.BIGINT(11),
+    type: Sequelize.BIGINT(),
     unique: true,
     allowNull: false
   },
@@ -19,7 +19,7 @@ let Model = seq.define('hotokoto', {
   from: Sequelize.STRING,
   creator: Sequelize.STRING,
   created_at: {
-    type: Sequelize.BIGINT(11),
+    type: Sequelize.BIGINT(),
     defaultValue: 0,
     set(val) {
       let num = parseInt(val)

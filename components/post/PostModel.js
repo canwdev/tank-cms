@@ -3,7 +3,7 @@ const seq = require('../../db/sequelize')
 
 let PostModel = seq.define('post', {
   id: {
-    type: Sequelize.BIGINT(11),
+    type: Sequelize.BIGINT(),
     autoIncrement: true,
     primaryKey: true,
     unique: true,
