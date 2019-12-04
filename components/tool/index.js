@@ -3,20 +3,20 @@ const path = require('path')
 const bcrypt = require('bcrypt')
 const Settings = require('./SettingsModel')
 const Hitokoto = require('./HitokotoModel')
-const {CODE_OK, UPLOAD_PATH, PUBLIC_PATH} = require('../../utils/common')
-const {handleCustomError, walk} = require('../../utils')
+const {UPLOAD_PATH, PUBLIC_PATH} = require('../../utils/common')
+const {formatFileNameWithDateTime, walk} = require('../../utils')
 // const seq = require('../db/sequelize')
 
 module.exports = {
 
   async encryptText(req, res, next) {
     try {
-      const text = req.query.text
+      const {text} = req.query
+
+      if (!text) return res.sendError({message: 'text 不能为空！'})
+
       const result = bcrypt.hashSync(text, 10)
-      return res.json({
-        code: CODE_OK,
-        data: result
-      })
+      return res.sendSuccess({data: result})
     } catch (error) {
       next(error)
     }
@@ -27,18 +27,17 @@ module.exports = {
     try {
       let file = req.file
       if (!file) {
-        return handleCustomError({res, message: "No file!"})
+        return res.sendError({message: "No file!"})
       }
 
       // file relative path
-      let path = file.destination + utils.formatFileNameWithDateTime('upload_', file.originalname)
+      let path = file.destination + formatFileNameWithDateTime('upload_', file.originalname)
 
       // save to file
       fs.rename(file.path, path, function (err) {
-        if (err) return handleCustomError({res, message: "Save file error!"})
+        if (err) return res.sendError({message: "Save file error!"})
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           data: {
             path,
             host: req.headers.host
@@ -61,8 +60,7 @@ module.exports = {
           files.push(v.substring(length))
         })
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           data: {
             files
           }
@@ -77,16 +75,14 @@ module.exports = {
   async deleteUploadedFile(req, res, next) {
     try {
       const fileName = req.body.fileName
-      if (!fileName) return handleCustomError({res, message: "No file name"})
+      if (!fileName) return res.sendError({message: "No file name"})
 
       const fullPath = path.join(UPLOAD_PATH + '/' + fileName)
 
       fs.unlink(fullPath, function (err) {
-        if (err) return handleCustomError({res, message: "文件不存在"})
+        if (err) return res.sendError({message: "文件不存在"})
 
-        return res.json({
-          code: CODE_OK
-        })
+        return res.sendSuccess()
       })
     } catch (error) {
       next(error)
@@ -97,8 +93,7 @@ module.exports = {
     try {
       let result = await Settings.findAll()
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         data: result
       })
 
@@ -111,7 +106,7 @@ module.exports = {
     const data = req.body
 
     try {
-      if (!data.id && !data.key) return handleCustomError({res, message: '缺少必要参数'})
+      if (!data.id && !data.key) return res.sendError({message: '缺少必要参数'})
 
       if (data.id) {
         // 按 id 修改
@@ -126,8 +121,7 @@ module.exports = {
           }
         )
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           message: '更新成功'
         })
       } else {
@@ -138,8 +132,7 @@ module.exports = {
           type: data.type
         })
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           message: '设置保存成功！'
         })
       }
@@ -162,9 +155,7 @@ module.exports = {
 
       await Hitokoto.create(data)
 
-      return res.json({
-        code: CODE_OK
-      })
+      return res.sendSuccess()
 
     } catch (error) {
       next(error)
@@ -187,8 +178,7 @@ module.exports = {
         ],
       })
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         data: result
       })
     } catch (error) {
@@ -197,8 +187,7 @@ module.exports = {
   },
 
   async temp(req, res, next) {
-    return res.json({
-      code: CODE_OK,
+    return res.sendSuccess({
       message: 'ok'
     })
   }

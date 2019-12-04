@@ -1,16 +1,13 @@
-const {CODE_OK, CODE_CLIENT_ERR} = require("../../utils/common")
 const Menu = require('./MenuModel')
 const Op = require('sequelize').Op
 const {getMenuTree, delMenuTreeCache} = require('./common')
-const {handleCustomError} = require('../../utils')
 
 module.exports = {
   async list(req, res, next) {
     try {
       const menu = await getMenuTree()
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         data: menu
       })
     } catch (error) {
@@ -35,8 +32,7 @@ module.exports = {
 
         delMenuTreeCache()
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           message: '更新成功'
         })
 
@@ -52,8 +48,7 @@ module.exports = {
 
         delMenuTreeCache()
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           message: '创建成功',
           data: {
             id: result.id
@@ -70,7 +65,7 @@ module.exports = {
 
     try {
       if (!id) {
-        return handleCustomError({res})
+        return res.sendError()
       }
 
       await Menu.destroy({
@@ -79,7 +74,7 @@ module.exports = {
         }
       })
 
-      return res.json({code: CODE_OK})
+      return res.sendSuccess()
     } catch (error) {
       next(error)
     }

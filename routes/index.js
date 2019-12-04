@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const clientSender = require('./middleware/clientSender')
 
 // 允许跨域访问
 router.use("*", function (req, res, next) {
@@ -9,9 +10,9 @@ router.use("*", function (req, res, next) {
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  return res.send('TankCMS 正在运行')
+  return res.send('TankCMS is Running')
 });
 
-router.use('/api', require('./api'));
+router.use('/api', clientSender, require('./api'));
 
 module.exports = router;

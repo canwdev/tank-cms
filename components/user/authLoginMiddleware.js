@@ -8,13 +8,9 @@ const User = require('./UserModel')
  * 需要验证的路由，需要在请求头加入 authorization 字段，值为登录成功获取的token
  * 会向下级传递 __userid 作为登录用户的id
  */
-module.exports = async function authLogin(res, req, next) {
+module.exports = async function authLogin(req, res, next) {
   // 必须先登录
   try {
-    // 这很奇怪，貌似也只能这样获取值
-    res = res.res
-    req = req.req
-
     let token = req.headers.authorization
     if (token) {
       const raw = String(token)

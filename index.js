@@ -74,5 +74,5 @@ function onError(error) {
 function onListening() {
   var addr = server.address();
 
-  console.log('Server running at ' + addr.address + port)
+  console.log('TankCMS Server running at ' + addr.address + port)
 }

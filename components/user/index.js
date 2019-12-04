@@ -2,14 +2,11 @@ const User = require('./UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {
-  CODE_OK,
-  CODE_CLIENT_ERR,
   JWT_TOKEN,
   JWT_TOKEN_EXPIRE,
   CODE_CLIENT_FORBIDDEN,
   CODE_TOKEN_EXPIRE
 } = require('../../utils/common')
-const {handleCustomError} = require('../../utils')
 
 module.exports = {
 
@@ -23,8 +20,7 @@ module.exports = {
         avatar: '/upload/avatar.jpg'
       })
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         message: '创建成功'
       })
 
@@ -39,7 +35,7 @@ module.exports = {
 
     try {
       if (!data.username || !data.password) {
-        return handleCustomError({res, message: '缺少用户名或密码'})
+        return res.sendError({message: '缺少用户名或密码'})
       }
 
       const user = await User.findOne({
@@ -53,7 +49,7 @@ module.exports = {
         user.password
       )
       if (!isPasswordValid) {
-        return handleCustomError({res, message: '用户名或密码错误'})
+        return res.sendError({message: '用户名或密码错误'})
       }
 
       // 生成 token
@@ -67,8 +63,7 @@ module.exports = {
       delete retUser.password
       retUser.token = token
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         message: '登录成功！',
         data: retUser
       })
@@ -82,8 +77,7 @@ module.exports = {
     try {
       const id = req.__userid
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         data: id
       })
 
@@ -103,7 +97,7 @@ module.exports = {
     try {
       const token = data.token
       if (!token) {
-        return handleCustomError({res, message: 'token格式错误'})
+        return res.sendError({message: 'token格式错误'})
       }
 
       const raw = String(token)
@@ -113,8 +107,7 @@ module.exports = {
       })
 
       if (!user) {
-        return handleCustomError({
-          res,
+        return res.sendError({
           code: CODE_CLIENT_FORBIDDEN,
           message: 'token验证失败 (1)'
         })
@@ -125,23 +118,20 @@ module.exports = {
       delete retUser.password
       retUser.token = token
       retUser.avatar = hostUrl + retUser.avatar
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         data: retUser
       })
     } catch (error) {
       console.error(error.message)
 
       if (error.message === 'jwt expired') {
-        return handleCustomError({
-          res,
+        return res.sendError({
           code: CODE_TOKEN_EXPIRE,
           message: '登录状态过期，请重新登录'
         })
       }
 
-      return handleCustomError({
-        res,
+      return res.sendError({
         code: CODE_CLIENT_FORBIDDEN,
         message: 'token验证失败 (2)'
       })

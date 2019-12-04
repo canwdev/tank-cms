@@ -1,8 +1,6 @@
 const Settings = require('./SettingsModel')
 const {getMenuTree} = require('../menu/common')
-const {CODE_OK} = require("../../utils/common")
 const pkg = require('../../package')
-const {handleCustomError} = require('../../utils')
 
 module.exports = {
   async index(req, res, next) {
@@ -18,8 +16,7 @@ module.exports = {
 
       const menu = await getMenuTree()
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         message: '请求成功',
         data: {
           vendor: {

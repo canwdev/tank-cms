@@ -3,8 +3,6 @@ const Op = require('sequelize').Op
 const Post = require('./PostModel')
 const User = require('../user/UserModel')
 const striptags = require('striptags')  // 去除HTML标签
-const {CODE_OK, CODE_CLIENT_ERR} = require('../../utils/common')
-const {handleCustomError} = require('../../utils')
 // const showdown  = require('showdown')
 
 module.exports = {
@@ -38,8 +36,7 @@ module.exports = {
       })
 
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         data: {
           count: result.count,
           rows: result.rows.map(v => {
@@ -83,8 +80,7 @@ module.exports = {
       //   post.content = converter.makeHtml(post.content)
       // }
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         data: post
       })
 
@@ -113,8 +109,7 @@ module.exports = {
           }
         )
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           message: '更新成功'
         })
       }
@@ -124,8 +119,7 @@ module.exports = {
         content: data.content,
         author_ids: user_id
       })
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         message: '创建成功',
         data: {
           id: result.id
@@ -142,13 +136,13 @@ module.exports = {
 
     try {
       if (!id) {
-        return handleCustomError({res, message: 'id 不能为空'})
+        return res.sendError({message: 'id 不能为空'})
       }
       await Post.destroy({
         where: {id}
       })
 
-      return res.json({code: CODE_OK})
+      return res.sendSuccess()
     } catch (error) {
       next(error)
     }

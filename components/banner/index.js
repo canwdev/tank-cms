@@ -1,5 +1,3 @@
-const {CODE_OK, CODE_CLIENT_ERR} = require("../../utils/common")
-const {handleCustomError} = require("../../utils")
 const Banner = require('./BannerModel')
 const Op = require('sequelize').Op
 
@@ -17,8 +15,7 @@ module.exports = {
         },
       })
 
-      return res.json({
-        code: CODE_OK,
+      return res.sendSuccess({
         data: result.sort((a, b) => a.priority - b.priority)
       })
     } catch (e) {
@@ -47,8 +44,7 @@ module.exports = {
           }
         )
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           message: '更新成功'
         })
       } else {
@@ -62,8 +58,7 @@ module.exports = {
           priority: data.priority,
         })
 
-        return res.json({
-          code: CODE_OK,
+        return res.sendSuccess({
           message: '设置保存成功！'
         })
       }
@@ -76,13 +71,13 @@ module.exports = {
     const {id} = req.query
 
     try {
-      if (!id) return handleCustomError({res})
+      if (!id) return res.sendError()
 
       await Banner.destroy({
         where: {id}
       })
 
-      return res.json({code: CODE_OK})
+      return res.sendSuccess()
     } catch (e) {
       next(e)
     }
