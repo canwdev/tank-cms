@@ -74,6 +74,8 @@ module.exports = {
         }
       })
 
+      delMenuTreeCache()
+
       return res.sendSuccess()
     } catch (error) {
       next(error)

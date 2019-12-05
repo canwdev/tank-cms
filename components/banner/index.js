@@ -7,16 +7,19 @@ module.exports = {
     try {
       const {showAll} = req.query
 
-      const result = await Banner.findAll(showAll ? {} : {
+      const showAllQuery = showAll ? {} : {hidden: {[Op.ne]: 1}}
+
+      const result = await Banner.findAll({
         where: {
-          hidden: {
-            [Op.ne]: 1
-          }
+          ...showAllQuery
         },
+        order: [
+          ['priority']
+        ],
       })
 
       return res.sendSuccess({
-        data: result.sort((a, b) => a.priority - b.priority)
+        data: result
       })
     } catch (e) {
       next(e)

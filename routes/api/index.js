@@ -31,6 +31,8 @@ router.post('/user/logout', authLogin, users.logout);
 router.get('/user/info', users.getUserInfo);
 
 router.get('/recruit/list', recruit.list)
+router.get('/recruit/types', recruit.types)
+router.post('/recruit/update', authLogin, recruit.update)
 
 
 router.use((err, req, res, next) => {

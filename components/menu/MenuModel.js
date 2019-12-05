@@ -29,7 +29,7 @@ let Model = seq.define('menu', {
     defaultValue: false,
     allowNull: false
   },
-}, {timestamps: false})
+}, {timestamps: true})
 
 Model.sync().then(async function () {
   const count = await Model.count()
