@@ -1,14 +1,13 @@
 # TankCMS · 个人版 CMS 开发框架
 
-> 简介：本项目致力于实现一个企业级网站基础框架。使用 Tank 命名，期望这个框架稳定并且机动。 
+> 简介：本项目致力于实现一个个人网站的 CMS 框架。命名为Tank，希望这个框架稳定且机动。 
 
-技术栈：
-
-- 后端：Node.js / Express / MySQL
+技术栈：Node.js / Express / MySQL(ORM:Sequelize)
 
 ## 启动项目
 
-配置数据库 `db/config.js`
+1. 重命名 `config.example.js` 到 `db/config.js`，并且编辑相应的数据库配置。
+2. 新建一个数据库，与配置文件的数据库名对应。初始化数据会自动生成，无需手动配置。
 
 ```sh
 yarn install
@@ -30,11 +29,11 @@ yarn install
 pm2 start ecosystem.config.js
 ```
 
-自动化部署：Automate.js（未开源）
+自动化部署：[Automate](https://github.com/canwdev/automate)
 
-## TODOs
+## 目前已实现的功能
 
-TODOs 已移动到文件
+> TODO: 待补充
 
 ## 参考
 
