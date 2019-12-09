@@ -65,9 +65,9 @@ pm2 start ecosystem.config.js
   
     - [x] 列表 `/post/list`
     - [x] 详情 `/post/detail`
-    - [ ] 显示/隐藏
+    - [x] 显示/隐藏
     - [ ] 标签分类/栏目分类
-    - [ ] 筛选/查询
+    - [x] 筛选/查询
   
   - [ ] FAQ 列表
   

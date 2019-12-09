@@ -3,56 +3,54 @@ const Op = require('sequelize').Op
 const Post = require('./PostModel')
 const User = require('../user/UserModel')
 const striptags = require('striptags')  // 去除HTML标签
+const {searchGenerator} = require('../../db/sequelize-utils')
+
 // const showdown  = require('showdown')
 
-module.exports = {
+function formatPostListRow(rows) {
+  return rows.map(item => {
+    item.content = striptags(item.content.slice(0, 200))
+    return item
+  })
+}
 
+module.exports = {
   async list(req, res, next) {
     try {
+      const {showAll, offset, limit} = req.query
 
-      let offset, limit
-      if (req.query.limit) {
-        offset = req.query.offset || 0
-        limit = req.query.limit
-
-        offset = parseInt(offset)
-        limit = parseInt(limit)
-      }
-
-      // console.log(offset, limit)
+      const showAllQuery = showAll ? {} : {hidden: {[Op.ne]: 1}}
+      let paginationQuery = limit ? {
+        offset: parseInt(offset) || 0,
+        limit: parseInt(limit),
+      } : {}
 
       // let result = await db.query('SELECT * FROM posts')
       let result = await Post.findAndCountAll({
         where: {
-          hidden: {
-            [Op.ne]: 1
-          }
+          ...showAllQuery
         },
-        offset,
-        limit,
+        ...paginationQuery,
         order: [
-          ['id', 'DESC']
-        ],
+          ['priority', 'ASC'],
+          ['id', 'DESC'],
+        ]
       })
 
 
       return res.sendSuccess({
         data: {
           count: result.count,
-          rows: result.rows.map(v => {
-            v.content = striptags(v.content.slice(0, 200))
-            return v
-          })
+          rows: formatPostListRow(result.rows)
         }
       })
     } catch (error) {
       next(error)
     }
   },
-
   async detail(req, res, next) {
     try {
-      const id = req.query.id
+      const {id} = req.query
 
       if (!id) {
         return res.json({
@@ -88,24 +86,30 @@ module.exports = {
       next(error)
     }
   },
-
   async update(req, res, next) {
     try {
       // 获取中间件传来的值
       const user_id = req.__userid
 
-      const data = req.body
+      const {
+        editMode, id,
+        title,
+        content,
+        isMarkdown,
+        hidden,
+      } = req.body
 
-      if (data.editMode && data.id) {
+      if (editMode && id) {
         await Post.update(
           {
-            title: data.title,
-            content: data.content,
+            title,
+            content,
             author_ids: user_id,
-            isMarkdown: data.isMarkdown
+            isMarkdown,
+            hidden
           },
           {
-            where: {id: data.id}
+            where: {id}
           }
         )
 
@@ -113,10 +117,10 @@ module.exports = {
           message: '更新成功'
         })
       }
-      // let result = await db.query('INSERT INTO posts(title, content) VALUES(?,?)', [data.title, data.content])
+      // let result = await db.query('INSERT INTO posts(title, content) VALUES(?,?)', [title, content])
       let result = await Post.create({
-        title: data.title,
-        content: data.content,
+        title: title,
+        content: content,
         author_ids: user_id
       })
       return res.sendSuccess({
@@ -130,7 +134,6 @@ module.exports = {
       next(error)
     }
   },
-
   async delete(req, res, next) {
     try {
       const {id} = req.query
@@ -143,6 +146,70 @@ module.exports = {
       return res.sendSuccess()
     } catch (error) {
       next(error)
+    }
+  },
+  async find(req, res, next) {
+    try {
+      const {
+        showAll, offset, limit,
+        title,
+        content,
+      } = req.query
+
+      let {
+        timeStart, // 毫秒数
+        timeEnd
+      } = req.query
+
+      const showAllQuery = showAll ? {} : {hidden: {[Op.ne]: 1}}
+      let paginationQuery = limit ? {
+        offset: parseInt(offset) || 0,
+        limit: parseInt(limit),
+      } : {}
+
+      const search = searchGenerator([
+        {label: 'title', value: title},
+        {label: 'content', value: content}
+      ])
+
+      let timeQuery = {}
+      if (timeStart && timeEnd) {
+        timeStart = parseInt(timeStart)
+        timeEnd = parseInt(timeEnd)
+
+        timeQuery = {
+          [Op.or]: {
+            createdAt: {
+              [Op.gt]: new Date(timeStart),
+              [Op.lt]: new Date(timeEnd),
+            },
+            updatedAt: {
+              [Op.gt]: new Date(timeStart),
+              [Op.lt]: new Date(timeEnd),
+            }
+          }
+        }
+      }
+
+      const result = await Post.findAndCountAll({
+        where: {
+          ...showAllQuery,
+          ...search,
+          ...timeQuery
+        },
+        ...paginationQuery,
+        order: [
+          ['priority', 'ASC'],
+          ['id', 'DESC'],
+        ]
+      })
+
+      return res.sendSuccess({
+        data: formatPostListRow(result.rows),
+        count: result.count
+      })
+    } catch (e) {
+      next(e)
     }
   }
 }

@@ -2,20 +2,10 @@ const RecruitType = require('./RecruitTypeModel')
 const Recruit = require('./RecruitModel')
 const Op = require('sequelize').Op
 const {arrayGroupBy} = require('../../utils')
+const {searchGenerator} = require('../../db/sequelize-utils')
 
+// 批量生成 Demo 数据
 // Recruit.bulkCreate(require('./fake-data/dist'))
-
-function searchGenerator(fields) {
-  let ret = []
-  fields.forEach(item => {
-    ret.push({
-      [item.label]: {
-        [Op.like]: `%${item.value}%`
-      }
-    })
-  })
-  return {[Op.and]: ret}
-}
 
 module.exports = {
   async types(req, res, next) {
@@ -151,7 +141,7 @@ module.exports = {
         {label: 't_category_id', value: t_category_id},
         {label: 't_area_id', value: t_area_id},
         {label: 't_job_id', value: t_job_id},
-        {label: 'hidden', value: hidden === 'true' ? 1 : 0},
+        // {label: 'hidden', value: hidden === 'true' ? 1 : 0},
         {label: 'priority', value: priority},
       ])
 
@@ -160,7 +150,10 @@ module.exports = {
           ...showAllQuery,
           ...search
         },
-        ...paginationQuery
+        ...paginationQuery,
+        order: [
+          ['priority', 'ASC']
+        ]
       })
 
       return res.sendSuccess({

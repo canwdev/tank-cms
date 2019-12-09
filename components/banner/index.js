@@ -14,7 +14,7 @@ module.exports = {
           ...showAllQuery
         },
         order: [
-          ['priority']
+          ['priority', 'ASC']
         ],
       })
 

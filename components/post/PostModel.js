@@ -7,6 +7,11 @@ let PostModel = seq.define('post', {
     autoIncrement: true,
     primaryKey: true,
     unique: true,
+    priority: {
+      type: Sequelize.BIGINT(),
+      defaultValue: 1,
+      allowNull: false
+    },
     allowNull: false
   },
   title: Sequelize.STRING,
