@@ -33,6 +33,8 @@ router.get('/user/info', users.getUserInfo);
 router.get('/recruit/list', recruit.list)
 router.get('/recruit/types', recruit.types)
 router.post('/recruit/update', authLogin, recruit.update)
+router.get('/recruit/delete', authLogin, recruit.delete)
+router.get('/recruit/find', recruit.find)
 
 
 router.use((err, req, res, next) => {

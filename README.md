@@ -6,10 +6,11 @@
 
 ## 启动项目
 
-1. 重命名 `config.example.js` 到 `db/config.js`，并且编辑相应的数据库配置。
-2. 新建一个数据库，与配置文件的数据库名对应。初始化数据会自动生成，无需手动配置。
+1. 重命名 ``db/config.example.js` 到 `db/config.js`，并且编辑相应的数据库配置。
+2. 在 MySQL 新建一个数据库，与配置文件的数据库名对应。初始化数据会自动生成，无需手动配置。
 
 ```sh
+# 安装依赖
 yarn install
 
 # 开发环境
@@ -36,7 +37,7 @@ pm2 start ecosystem.config.js
 全部的 API 路由表：[点此查看](routes/api/index.js)
 
 - Base 接口 `/api`
-  - [x] 无限分类菜单的实现 `/banner/list`
+  - [x] 无限分类菜单的实现 `/menu/list`
   
     - [基础实现](https://segmentfault.com/a/1190000014284076)
     - 内存缓存（memory-cache）

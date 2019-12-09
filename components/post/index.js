@@ -132,12 +132,10 @@ module.exports = {
   },
 
   async delete(req, res, next) {
-    const id = req.query.id
-
     try {
-      if (!id) {
-        return res.sendError({message: 'id 不能为空'})
-      }
+      const {id} = req.query
+      if (!id) return res.sendError({message: 'id 不能为空'})
+
       await Post.destroy({
         where: {id}
       })

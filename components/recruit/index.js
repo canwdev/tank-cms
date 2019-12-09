@@ -1,15 +1,27 @@
-const RecuritType = require('./RecruitTypeModel')
-const Recurit = require('./RecruitModel')
+const RecruitType = require('./RecruitTypeModel')
+const Recruit = require('./RecruitModel')
 const Op = require('sequelize').Op
 const {arrayGroupBy} = require('../../utils')
 
-// Recurit.bulkCreate(require('./fake-data/dist'))
+// Recruit.bulkCreate(require('./fake-data/dist'))
+
+function searchGenerator(fields) {
+  let ret = []
+  fields.forEach(item => {
+    ret.push({
+      [item.label]: {
+        [Op.like]: `%${item.value}%`
+      }
+    })
+  })
+  return {[Op.and]: ret}
+}
 
 module.exports = {
   async types(req, res, next) {
     try {
       const {grouped} = req.query
-      const types = await RecuritType.findAll()
+      const types = await RecruitType.findAll()
 
       return res.sendSuccess({
         data: grouped ? arrayGroupBy(JSON.parse(JSON.stringify(types)), 'type') : types
@@ -21,28 +33,25 @@ module.exports = {
   async list(req, res, next) {
 
     try {
-      let {showAll, jobsOnly, offset, limit} = req.query
+      const {showAll, jobsOnly, offset, limit} = req.query
 
-      let showAllQuery = showAll ? {} : {hidden: {[Op.ne]: 1}}
+      const showAllQuery = showAll ? {} : {hidden: {[Op.ne]: 1}}
+      let paginationQuery = limit ? {
+        offset: parseInt(offset) || 0,
+        limit: parseInt(limit),
+      } : {}
 
-      let paginationQuery = {}
-      if (limit) {
-        offset = parseInt(offset) || 0
-        limit = parseInt(limit)
-        paginationQuery = {
-          offset,
-          limit,
-        }
-      }
-
-      const jobsResult = await Recurit.findAndCountAll({
+      const jobsResult = await Recruit.findAndCountAll({
         where: {
           ...showAllQuery,
         },
-        ...paginationQuery
+        ...paginationQuery,
+        order: [
+          ['priority', 'ASC']
+        ],
       })
 
-      const jobs = jobsResult.rows.sort((a, b) => a.priority - b.priority)
+      const jobs = jobsResult.rows
 
       if (jobsOnly) {
         return res.sendSuccess({
@@ -51,7 +60,7 @@ module.exports = {
         })
       }
 
-      const jobTypes = await RecuritType.findAll()
+      const jobTypes = await RecruitType.findAll()
 
 
       return res.sendSuccess({
@@ -65,11 +74,11 @@ module.exports = {
     }
   },
   async update(req, res, next) {
-    const data = req.body
     try {
+      const data = req.body
       if (data.id) {
         // 按 id 修改
-        await Recurit.update(
+        await Recruit.update(
           {
             title: data.title,
             desc: data.desc,
@@ -87,7 +96,7 @@ module.exports = {
         return res.sendSuccess()
       } else {
         // 创建新的
-        await Recurit.create({
+        await Recruit.create({
           title: data.title,
           desc: data.desc,
           t_category_id: data.t_category_id,
@@ -103,4 +112,63 @@ module.exports = {
       next(e)
     }
   },
+  async delete(req, res, next) {
+    try {
+      const {id} = req.query
+      if (!id) return res.sendError({message: 'id 不能为空'})
+
+      await Recruit.destroy({
+        where: {id}
+      })
+
+      return res.sendSuccess()
+    } catch (error) {
+      next(error)
+    }
+  },
+  async find(req, res, next) {
+    try {
+      const {
+        showAll, offset, limit,
+        title,
+        desc,
+        t_category_id,
+        t_area_id,
+        t_job_id,
+        hidden,
+        priority
+      } = req.query
+
+      const showAllQuery = showAll ? {} : {hidden: {[Op.ne]: 1}}
+      let paginationQuery = limit ? {
+        offset: parseInt(offset) || 0,
+        limit: parseInt(limit),
+      } : {}
+
+      const search = searchGenerator([
+        {label: 'title', value: title},
+        {label: 'desc', value: desc},
+        {label: 't_category_id', value: t_category_id},
+        {label: 't_area_id', value: t_area_id},
+        {label: 't_job_id', value: t_job_id},
+        {label: 'hidden', value: hidden === 'true' ? 1 : 0},
+        {label: 'priority', value: priority},
+      ])
+
+      const result = await Recruit.findAndCountAll({
+        where: {
+          ...showAllQuery,
+          ...search
+        },
+        ...paginationQuery
+      })
+
+      return res.sendSuccess({
+        data: result.rows,
+        count: result.count
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
 }
