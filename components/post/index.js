@@ -39,10 +39,8 @@ module.exports = {
 
 
       return res.sendSuccess({
-        data: {
-          count: result.count,
-          rows: formatPostListRow(result.rows)
-        }
+        data: formatPostListRow(result.rows),
+        count: result.count,
       })
     } catch (error) {
       next(error)
