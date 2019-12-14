@@ -7,7 +7,7 @@ try {
   const info = fs.readFileSync(path.join(__dirname, 'oss_config.json'), {encoding: 'utf8'})
   config = JSON.parse(info)
 } catch (e) {
-  console.warn(e.message)
+  console.warn('OSS 模块异常：', e.message)
 }
 
 module.exports = {

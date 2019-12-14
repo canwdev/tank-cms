@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt')
 const Settings = require('./SettingsModel')
 const Hitokoto = require('./HitokotoModel')
 const {UPLOAD_PATH, PUBLIC_PATH} = require('../../utils/common')
-const {formatFileNameWithDateTime, walk} = require('../../utils')
+const {walk} = require('../../utils')
+const sanitize = require("sanitize-filename")
 // const seq = require('../db/sequelize')
 
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
       }
 
       // file relative path
-      let path = file.destination + formatFileNameWithDateTime('upload_', file.originalname)
+      let path = file.destination + sanitize(file.originalname)
 
       // save to file
       fs.rename(file.path, path, function (err) {
@@ -40,7 +41,7 @@ module.exports = {
         return res.sendSuccess({
           data: {
             path,
-            host: req.headers.host
+            host: req._getHostUrl()
           }
         })
       })
@@ -54,15 +55,16 @@ module.exports = {
       walk(UPLOAD_PATH, function (err, results) {
         const length = PUBLIC_PATH.length
 
-        const files = []
-        // 去除文件系前面的路径，只保留web可访问的public路径
-        results.forEach(v => {
-          files.push(v.substring(length))
+        const files = results.map(name => {
+          // 去除文件系前面的路径，只保留web可访问的public路径
+          // 替换 Windows下的反斜杠为正斜杠
+          return name.substring(length).replace(/\\/g,'/')
         })
 
         return res.sendSuccess({
           data: {
-            files
+            files: files.reverse(),
+            host: req._getHostUrl()
           }
         })
       })

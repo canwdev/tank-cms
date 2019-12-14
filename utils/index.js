@@ -117,5 +117,5 @@ module.exports = {
   walk: walkDir,
   buildTree,
   sortTree,
-  arrayGroupBy
+  arrayGroupBy,
 }
