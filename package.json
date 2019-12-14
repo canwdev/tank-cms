@@ -29,8 +29,5 @@
   "sequelize": "^5.15.1",
   "striptags": "^3.1.1",
   "stylus": "0.54.5"
- },
- "devDependencies": {
-  "nodemon": "^1.19.1"
  }
 }
