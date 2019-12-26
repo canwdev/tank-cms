@@ -31,6 +31,7 @@ module.exports = {
         return res.sendError({message: "No file!"})
       }
 
+      // TODO: 检测重名文件
       // file relative path
       let path = file.destination + sanitize(file.originalname)
 
