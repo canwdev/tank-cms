@@ -112,6 +112,21 @@ function arrayGroupBy(arr, key) {
   }, {})
 }
 
+/*function groupBy1(xs, key, addKey) {
+  return xs.reduce(function (pre, cur, i) {
+    var groupName = cur[key]
+    var num = Number(cur[addKey]) || 0
+    if (!pre[groupName]) {
+      pre[groupName] = 0
+    }
+    pre[groupName] += num
+
+    // console.log(i, pre, cur)
+    // debugger
+    return pre
+  }, {})
+}*/
+
 module.exports = {
   formatFileNameWithDateTime,
   walk: walkDir,
